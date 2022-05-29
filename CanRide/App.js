@@ -7,11 +7,8 @@ import {
   Dimensions,
   Alert,
   Button,
+  TextInput,
 } from "react-native";
-
-import { StyleSheet, View, Dimensions, Alert, Button } from "react-native";
-
-import { StyleSheet, View, Dimensions, TextInput } from "react-native";
 
 
 import styled from "styled-components";
