@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import metro from "./metro.json";
+import code from "./서울시 지하철역 정보 검색 (역명).json";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
@@ -104,7 +105,19 @@ const app = ({ navigation }) => {
                 }}
                 onPress={() => {
                   //Alert.alert(ccode);
-                  Alert.alert(marker.name);
+                  var station_code = code.DATA;
+                  var ccode = "";
+                  var ccodeName = "";
+                  for (var i = 0; i < station_code.length; i++) {
+                    if (station_code[i]["station_nm"] === marker.name) {
+                      ccode = station_code[i]["fr_code"];
+                      ccodeName = station_code[i]["station_nm"];
+                      ccodelat = marker.lat;
+                      ccodelng = marker.lng;
+                    }
+                  }
+                  Alert.alert(ccodeName);
+                  console.log("출발지 코드 : ", ccode);
                 }}
               ></Marker>
             );
