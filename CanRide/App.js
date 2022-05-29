@@ -1,6 +1,6 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import { StyleSheet, View, Dimensions, TextInput } from "react-native";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
@@ -23,8 +23,6 @@ const app = ({ navigation }) => {
   const [location, setLocation] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
   const [inputText, setInputText] = useState("");
-
-  const ccode = {};
 
   const updateMapStyle = () => {
     setMapWidth("100%");
@@ -56,6 +54,13 @@ const app = ({ navigation }) => {
   return (
     <Wrapper style={{ backgroundColor: "white" }}>
       <View style={styles.centeredView}>
+        <TextInput
+          style={[styles.TextInput, { width: "80%" }]}
+          placeholder="어디 가실래요?"
+          value={inputText}
+          onChangeText={setInputText}
+        />
+
         <MapView
           initialRegion={initialRegion}
           style={[styles.map, { width: SCREEN_WIDTH }]}
@@ -118,7 +123,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
   },
-
   centeredView: {
     flex: 1,
     justifyContent: "center",
