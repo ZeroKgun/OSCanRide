@@ -3,10 +3,14 @@ import * as React from "react";
 import {
   StyleSheet,
   View,
+  Text,
   Dimensions,
   Alert,
   TextInput,
   Button,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
@@ -18,7 +22,7 @@ import axios from "axios";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const desc = [];
 let today = new Date();
 
@@ -44,6 +48,8 @@ const app = ({ navigation }) => {
   const [destination, setDestination] = useState("");
   const [desName, setDesName] = useState("");
   const [searchValue, setSearchValue] = useState("");
+
+  const [modalVisible, setModalVisible] = useState(true);
 
   const ccode = {};
 
@@ -105,29 +111,74 @@ const app = ({ navigation }) => {
     console.log(inputText);
   }
 
+  const pressButton = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <Wrapper style={{ backgroundColor: "white" }}>
       <View style={styles.centeredView}>
-        <TextInput
-          style={[styles.TextInput, { width: "80%" }]}
-          placeholder="Where are you going?"
-          value={inputText}
-          onChangeText={setInputText}
-        />
-        <Button
-          title="도착지 설정"
-          onPress={() => {
-            if (inputText === "") {
-              Alert.alert("도착지에 대한 정보가 없습니다!");
-            } else {
-              handleDestination();
-            }
-          }}
-        />
+        <Modal animationType="fade" transparent={true} visible={modalVisible}>
+          <View style={styles.overlay}>
+            <TouchableWithoutFeedback onPress={closeModal}>
+              <View style={styles.background} />
+            </TouchableWithoutFeedback>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  style={[styles.TextInput, { width: "80%" }]}
+                  placeholder="Where are you going?"
+                  value={inputText}
+                  onChangeText={setInputText}
+                />
+                <View style={{ flexDirection: "row", alignSelf: "center" }}>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                      if (inputText === "") {
+                        Alert.alert("도착지에 대한 정보가 없습니다!");
+                      } else {
+                        handleDestination();
+                        setModalVisible(!modalVisible);
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>목적지 설정</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={set_fistDestination}
+                  >
+                    <Text style={{ color: "white" }}>목적지 초기화</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
+        <TouchableOpacity
+          style={[
+            styles.button,
+            {
+              //marginTop: 50,
+              width: SCREEN_WIDTH / 2,
+              position: "absolute",
+              zIndex: 2,
+              bottom: SCREEN_HEIGHT - 90,
+            },
+          ]}
+          onPress={pressButton}
+        >
+          <Text style={{ color: "white" }}>목적지 설정</Text>
+        </TouchableOpacity>
         <MapView
           initialRegion={initialRegion}
-          style={[styles.map, { width: SCREEN_WIDTH }]}
+          style={[styles.map, { width: SCREEN_WIDTH, zIndex: 1 }]}
           provider={PROVIDER_GOOGLE}
           showsUserLocation={true}
           showsMyLocationButton={true}
@@ -210,6 +261,15 @@ const Wrapper = styled.View`
   background: rgba(0, 0, 0, 0.8);
 `;
 const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+  },
+  background: {
+    flex: 0,
+  },
+
   map: {
     flex: 1,
     width: "100%",
@@ -225,10 +285,90 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: "lightgrey",
+    backgroundColor: "black",
+  },
+  container: {
+    margin: 20,
+  },
+  textInput: {
+    fontSize: 20,
+    paddingTop: 0,
+  },
+  button: {
+    backgroundColor: "#D6C6B6",
+    marginTop: 0,
+    alignSelf: "center",
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 20,
+  },
+  // button: {
+  //   borderRadius: 20,
+  //   padding: 10,
+  //   elevation: 2,
+  // },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
+  },
+
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
+  DetailContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  start: {
+    flex: 1.2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  startName: {
+    fontSize: 58,
+    fontWeight: "500",
+    color: "white",
+  },
+  transfer: {
+    flex: 1.2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  transferName: {
+    fontSize: 58,
+    fontWeight: "500",
+    color: "red",
+  },
+  end: {
+    flex: 1.2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  endName: {
+    fontSize: 58,
+    fontWeight: "500",
+    color: "green",
   },
 });
