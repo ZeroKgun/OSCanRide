@@ -5,9 +5,11 @@ import {
   View,
   Dimensions,
   Alert,
-  TextInput,
   Button,
+  TextInput,
 } from "react-native";
+
+
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
@@ -30,17 +32,16 @@ const app = ({ navigation }) => {
   const [mapWidth, setMapWidth] = useState("99%");
   const [location, setLocation] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [inputText, setInputText] = useState("");
-  const [searchValue, setSearchValue] = useState("");
 
   const ccode = {};
+
 
   const updateMapStyle = () => {
     setMapWidth("100%");
   };
 
   const handleDestination = () => {
-    console.log(inputText);
+    console.log("버튼 클릭");
   };
 
   // Get current location information
@@ -69,13 +70,15 @@ const app = ({ navigation }) => {
   return (
     <Wrapper style={{ backgroundColor: "white" }}>
       <View style={styles.centeredView}>
+        <Button title="도착지 설정" onPress={handleDestination()} />
+
+
         <TextInput
           style={[styles.TextInput, { width: "80%" }]}
-          placeholder="Where are you going?"
+          placeholder="어디 가실래요?"
           value={inputText}
           onChangeText={setInputText}
         />
-        <Button title="도착지 설정" onPress={handleDestination()} />
 
         <MapView
           initialRegion={initialRegion}
@@ -130,6 +133,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+
   TextInput: {
     marginTop: 20,
     marginBottom: 10,
