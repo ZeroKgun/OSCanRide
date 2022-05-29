@@ -117,6 +117,11 @@ const styles = StyleSheet.create({
   TextInput: {
     marginTop: 20,
     marginBottom: 10,
+    paddingHorizontal: 10,
+    height: 40,
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
   },
   centeredView: {
     flex: 1,
