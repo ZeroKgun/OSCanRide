@@ -1,11 +1,16 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
+
+import { StyleSheet, View, Dimensions, Alert, Button } from "react-native";
+
 import { StyleSheet, View, Dimensions, TextInput } from "react-native";
+
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import metro from "./metro.json";
+import code from "./서울시 지하철역 정보 검색 (역명)";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
@@ -22,10 +27,13 @@ const app = ({ navigation }) => {
   const [mapWidth, setMapWidth] = useState("99%");
   const [location, setLocation] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [inputText, setInputText] = useState("");
 
   const updateMapStyle = () => {
     setMapWidth("100%");
+  };
+
+  const handleDestination = () => {
+    console.log("버튼 클릭");
   };
 
   // Get current location information
@@ -54,6 +62,8 @@ const app = ({ navigation }) => {
   return (
     <Wrapper style={{ backgroundColor: "white" }}>
       <View style={styles.centeredView}>
+        <Button title="도착지 설정" onPress={handleDestination()} />
+
         <TextInput
           style={[styles.TextInput, { width: "80%" }]}
           placeholder="어디 가실래요?"
@@ -114,6 +124,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+
   TextInput: {
     marginTop: 20,
     marginBottom: 10,
@@ -123,6 +134,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
   },
+
   centeredView: {
     flex: 1,
     justifyContent: "center",
