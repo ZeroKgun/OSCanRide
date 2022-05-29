@@ -31,14 +31,44 @@ const app = ({ navigation }) => {
   const [location, setLocation] = useState(0);
   const [errorMsg, setErrorMsg] = useState(null);
   const [inputText, setInputText] = useState("");
+  const [destination, setDestination] = useState("");
+  const [desName, setDesName] = useState("");
+  const [searchValue, setSearchValue] = useState("");
 
   const ccode = {};
 
   const updateMapStyle = () => {
     setMapWidth("100%");
   };
+
+  const set_fistDestination = () => {
+    setInputText("");
+  };
+
   const handleDestination = () => {
-    console.log(inputText);
+    setDestination("");
+    setDesName("");
+    console.log(searchValue);
+    var station_code = code.DATA;
+    let isCorrect = 0;
+    for (var i = 0; i < station_code.length; i++) {
+      if (
+        station_code[i]["station_nm"] === inputText ||
+        station_code[i]["station_nm"] + "역" === inputText
+      ) {
+        setDestination(station_code[i]["fr_code"]);
+        setDesName(station_code[i]["station_nm"]);
+
+        isCorrect = 1;
+      }
+    }
+    if (isCorrect == 0) {
+      console.log("잘못된 입력!");
+    }
+    console.log("도착지 코드 : ", destination);
+    console.log("도착지 이름 : ", desName);
+    //setInputText("");
+    return destination, desName;
   };
 
   // Get current location information
@@ -52,6 +82,7 @@ const app = ({ navigation }) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+
     })();
   }, []);
 
@@ -73,7 +104,17 @@ const app = ({ navigation }) => {
           value={inputText}
           onChangeText={setInputText}
         />
-        <Button title="도착지 설정" onPress={handleDestination()} />
+        <Button
+          title="도착지 설정"
+          onPress={() => {
+            if (inputText === "") {
+              Alert.alert("도착지에 대한 정보가 없습니다!");
+            } else {
+              handleDestination();
+            }
+          }}
+        />
+
         <MapView
           initialRegion={initialRegion}
           style={[styles.map, { width: SCREEN_WIDTH }]}
@@ -104,21 +145,26 @@ const app = ({ navigation }) => {
                   //longitude: marker.lng,
                 }}
                 onPress={() => {
-                  //Alert.alert(ccode);
-                  var station_code = code.DATA;
-                  var ccode = "";
-                  var ccodeName = "";
-                  for (var i = 0; i < station_code.length; i++) {
-                    if (station_code[i]["station_nm"] === marker.name) {
-                      ccode = station_code[i]["fr_code"];
-                      ccodeName = station_code[i]["station_nm"];
-                      ccodelat = marker.lat;
-                      ccodelng = marker.lng;
+                  if (inputText === "") {
+                    Alert.alert("도착지에 대한 정보가 없습니다!");
+                  } else {
+                    //Alert.alert(ccode);
+                    var station_code = code.DATA;
+                    var ccode = "";
+
+                    for (var i = 0; i < station_code.length; i++) {
+                      if (station_code[i]["station_nm"] === marker.name) {
+                        ccode = station_code[i]["fr_code"];
+                        ccodeName = station_code[i]["station_nm"];
+                        ccodelat = marker.lat;
+                        ccodelng = marker.lng;
+                      }
                     }
+                    console.log("출발지 코드 : ", ccode);
+                    console.log("출발지 이름", ccodeName);
                   }
-                  Alert.alert(ccodeName);
-                  console.log("출발지 코드 : ", ccode);
-                }}
+                }
+                }
               ></Marker>
             );
           })}
