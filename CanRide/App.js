@@ -65,7 +65,32 @@ const app = ({ navigation }) => {
           onMapReady={() => {
             updateMapStyle();
           }}
-        ></MapView>
+        >
+          <Marker
+            coordinate={{
+              latitude: 37.548014,
+              longitude: 127.074658,
+            }}
+            title="this is a marker"
+            description="this is a marker example"
+          />
+          <Marker
+            coordinate={{
+              latitude: 36.548014,
+              longitude: 127.074658,
+            }}
+            title="this is a marker"
+            description="this is a marker example"
+          />
+          <Marker
+            coordinate={{
+              latitude: 38.548014,
+              longitude: 127.074658,
+            }}
+            title="this is a marker"
+            description="this is a marker example"
+          />
+        </MapView>
       </View>
     </Wrapper>
   );
@@ -83,6 +108,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
+  },
+  TextInput: {
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    height: 40,
+    borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
   },
 
   centeredView: {
