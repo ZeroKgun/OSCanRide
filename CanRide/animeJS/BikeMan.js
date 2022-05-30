@@ -17,7 +17,7 @@ function BikeMan() {
           height: 200,
           //backgroundColor: "#eee",
         }}
-        source={require("./animations/bikeman.json")}
+        source={require("../animations/bikeman.json")}
       />
     </View>
   );

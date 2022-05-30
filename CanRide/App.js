@@ -35,11 +35,10 @@ import allclear from "./JSON/allclear.json";
 import nonego from "./JSON/nonego.json";
 import transferno from "./JSON/transferno.json";
 import stopsameline from "./JSON/가다끊김.json";
-//import HomeScreen from "./HomeScreen";
-import MapScreen from "./MapScreen";
-import DetailsScreen from "./DetailsScreen";
-import WalkScreen from "./WalkScreen";
-import BikeScreen from "./BikeScreen.js";
+import MapScreen from "./screens/MapScreen";
+import DetailsScreen from "./screens/DetailsScreen";
+import WalkScreen from "./screens/WalkScreen";
+import BikeScreen from "./screens/BikeScreen.js";
 import LottieView from "lottie-react-native";
 import * as SplashScreen from "expo-splash-screen";
 

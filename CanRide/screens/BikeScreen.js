@@ -10,30 +10,31 @@ import {
   FlatList,
   Button,
   fetch,
+  ImageBackground,
 } from "react-native";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import metro from "./JSON/metro.json";
+import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "./JSON/서울시 지하철역 정보 검색 (역명).json";
+import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
 import haversine from "haversine-distance";
 //import { LinearGradient } from "expo-linear-gradient";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import styles from "./styles";
-import WalkMan from "./WalkMan";
+import styles from "../styles";
+import BikeMan from "../animeJS/BikeMan";
 
 let today = new Date();
 let hours = today.getHours();
 
-function WalkScreen({ route, navigation }) {
-  const { distance, duration, stepCount } = route.params;
+function BikeScreen({ route, navigation }) {
+  const { distance, duration, taxi_fare } = route.params;
   console.log("거리", distance);
   console.log("시간", duration);
-  console.log("도보수", stepCount);
+  console.log("택시 비", taxi_fare);
 
   const hourormin = () => {
     if (duration > 3600) {
@@ -54,7 +55,7 @@ function WalkScreen({ route, navigation }) {
   const howHard = () => {
     {
       if (distance > 6000) {
-        return <Text style={[{ color: "red" }]}>멀어요!</Text>;
+        return <Text style={[{ color: "red" }]}>조금 빡세요!^^</Text>;
       } else if (distance <= 6000 && distance >= 1000) {
         return <Text style={[{ color: "orange" }]}>할만해요!</Text>;
       } else {
@@ -70,9 +71,6 @@ function WalkScreen({ route, navigation }) {
           <Text style={[styles.walkdistanceText, { color: "yellow" }]}>
             거리: {(distance / 1000).toFixed(1)}km
           </Text>
-          <Text style={[styles.walkdistanceText, { color: "yellow" }]}>
-            도보수: {stepCount}걸음
-          </Text>
           <Text style={{ color: "yellow" }}>{hourormin()}</Text>
         </View>
         <View
@@ -84,36 +82,33 @@ function WalkScreen({ route, navigation }) {
           }}
         >
           <Text style={{ fontSize: 20 }}>{howHard()}</Text>
-          <WalkMan />
+          <BikeMan />
         </View>
       </View>
     );
   } else {
     return (
-      <View style={[styles.walkcontainer, { background: "cyan" }]}>
+      <View style={[styles.walkcontainer, { backgroundColor: "cyan" }]}>
         <View style={styles.distance}>
           <Text style={[styles.walkdistanceText, { color: "white" }]}>
             거리: {(distance / 1000).toFixed(1)}km
           </Text>
-          <Text style={[styles.walkdistanceText, { color: "white" }]}>
-            도보수: {stepCount}걸음
-          </Text>
-          <Text>{hourormin()}</Text>
+          <Text style={{ color: "white" }}>{hourormin()}</Text>
         </View>
         <View
           style={{
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "grey",
+            backgroundColor: "cyan",
           }}
         >
           <Text style={{ fontSize: 20 }}>{howHard()}</Text>
-          <WalkMan />
+          <BikeMan />
         </View>
       </View>
     );
   }
 }
 
-export default WalkScreen;
+export default BikeScreen;
