@@ -33,6 +33,12 @@ import styles from "../styles";
 import { FontAwsome } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
 //import { TouchableOpacity } from "react-native-gesture-handler";
+import allclear from "../JSON/allclear.json";
+import none from "../JSON/nonego.json";
+import transnogo from "../JSON/transferno.json";
+import stopsameline from "../JSON/가다끊김.json";
+import ziseok from "../test.json";
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 //const desc = [];
@@ -276,6 +282,12 @@ function MapScreen({ navigation }) {
                     console.log("출발지 코드 : ", ccode);
 
                     const URL = `https://map.naver.com/v5/api/transit/directions/subway?start=${ccode}&goal=${destination}&departureTime=${year}-${month}-${date}T${hours}%3A${minutes}%3A${seconds}`;
+                    //const allgo = allclear;
+                    //const transno = transnogo;
+                    //const nonego = none;
+                    //const test = stopsameline;
+                    //const test = ziseok;
+
                     console.log(URL);
                     if (destination === "") {
                       Alert.alert("도착지에 대한 정보가 없습니다!");
@@ -284,6 +296,8 @@ function MapScreen({ navigation }) {
                         axios.spread((data) => {
                           let cnt = 0; //환승역 갯수
                           let count = 0; //출발지와 목적지
+                          let ccnt = 0;
+                          let ccc = 0;
                           let placelist = [];
                           let list = [];
                           let stationcntlist = [];
@@ -297,118 +311,128 @@ function MapScreen({ navigation }) {
                             j = 0;
                           let transcount = 0;
                           let startOK = true;
-                          let transferOK = [];
+                          let transferOK = [0];
                           //detail에 넘겨줄 부분이
                           //몇정거장인지
                           //탑승 가능 여부 변수
                           //걸리는 시간
                           //환승역
-                          for (i = 0; i < legs.steps.length; i = i + 2) {
-                            if (
-                              i === legs.steps.length ||
-                              i === legs.steps.length - 1
-                            ) {
-                              transcount = transcount - 1;
-                            }
-                            if (data.data.paths[0].shutdown === true) {
-                              console.log("지하철이 처음부터 끊겼다!");
-                              startOK = false;
-                            } else if (
-                              data.data.paths[0].fares[0].routes.length > 2 &&
-                              data.data.paths[0].fares[0].routes[transcount][0]
-                                .type.id ===
+                          placelist[ccnt] = legs.steps[0].stations[0].placeId;
+                          ccnt++;
+                          placelist[ccnt] =
+                            legs.steps[
+                              legs.steps.length - 1
+                            ].stations[0].placeId;
+                          for (i = 0; i < legs.steps.length; i++) {
+                            if (legs.steps[i].type === "SUBWAY") {
+                              if (i === legs.steps.length - 1) {
+                                transcount = transcount - 1;
+                              }
+                              if (data.data.paths[0].shutdown === true) {
+                                console.log("지하철이 처음부터 끊겼다!");
+                                startOK = false;
+                              }
+                              //else if (
+                              //   data.data.paths[0].fares[0].routes.length ===
+                              //     2 &&
+                              //   data.data.paths[0].fares[0].routes[0][0].type
+                              //     .id ===
+                              //     data.data.paths[0].fares[0].routes[1][0]
+                              //       .type.id
+                              // ) {
+                              //   console.log(
+                              //     "지하철이 가다가 끝까지 못가고 멈췄다!"
+                              //   );
+                              //   transferOK[transcount] = false;
+                              // } else if (
+                              //   data.data.paths[0].fares[0].routes
+                              //     .length > 2 &&
+                              //   data.data.paths[0].fares[0].routes[
+                              //     transcount
+                              //   ][0].type.id ===
+                              //     data.data.paths[0].fares[0].routes[
+                              //       transcount + 1
+                              //     ][0].type.id
+                              // ) {
+                              //   console.log(
+                              //     "지하철이 가다가 끝까지 못가고 멈췄다!"
+                              //   );
+                              //   transferOK[transcount] = false;
+                              // }
+                              else if (
+                                data.data.paths[0].legs[0].steps[i].shutdown ===
+                                true
+                              ) {
+                                console.log("환승을 못하고 지하철이 끊겼다!");
+                                transferOK[transcount] = false;
+                              } else {
+                                console.log("가자!");
+                              }
+                              listColor[ccc] =
                                 data.data.paths[0].fares[0].routes[
-                                  transcount + 1
-                                ][0].type.id
-                            ) {
+                                  ccc
+                                ][0].type.color;
+                              ccc++;
+                              var setTime = {
+                                hour: legs.steps[i].departureTime.substring(
+                                  11,
+                                  13
+                                ),
+                                minute: legs.steps[i].departureTime.substring(
+                                  14,
+                                  16
+                                ),
+                                second: legs.steps[i].departureTime.substring(
+                                  17,
+                                  19
+                                ),
+                              };
                               console.log(
-                                "지하철이 가다가 끝까지 못가고 멈췄다!"
+                                setTime.hour,
+                                "시",
+                                setTime.minute,
+                                "분",
+                                setTime.second,
+                                "초에 지하철 도착"
                               );
-                              transferOK[transcount] = false;
-                            } else if (
-                              data.data.paths[0].fares[0].routes.length === 2 &&
-                              data.data.paths[0].fares[0].routes[0][0].type
-                                .id ===
-                                data.data.paths[0].fares[0].routes[1][0].type.id
-                            ) {
-                              console.log(
-                                "지하철이 가다가 끝까지 못가고 멈췄다!"
-                              );
-                              startOK = false;
-                            } else if (
-                              data.data.paths[0].legs[0].steps[i].shutdown ===
-                              true
-                            ) {
-                              console.log("환승을 못하고 지하철이 끊겼다!");
-                              transferOK[transcount] = false;
-                            } else {
-                              console.log("가자!");
-                            }
-
-                            listColor[i / 2] =
-                              data.data.paths[0].fares[0].routes[
-                                i / 2
-                              ][0].type.color;
-                            var setTime = {
-                              hour: legs.steps[i].departureTime.substring(
-                                11,
-                                13
-                              ),
-                              minute: legs.steps[i].departureTime.substring(
-                                14,
-                                16
-                              ),
-                              second: legs.steps[i].departureTime.substring(
-                                17,
-                                19
-                              ),
-                            };
-                            console.log(
-                              setTime.hour,
-                              "시",
-                              setTime.minute,
-                              "분",
-                              setTime.second,
-                              "초에 지하철 도착"
-                            );
-                            starthourlist[count] = setTime.hour;
-                            startMinlist[count] = setTime.minute;
-                            startseclist[count] = setTime.second;
-                            stationcntlist[count] =
-                              legs.steps[i].stations.length;
-                            placelist[count] =
-                              legs.steps[i].stations[0].placeId;
-                            count++;
-                            for (
-                              j = 0;
-                              j < legs.steps[i].stations.length;
-                              j++
-                            ) {
-                              console.log(legs.steps[i].stations[j].name);
-                            }
-                            if (i + 1 != legs.steps.length) {
-                              list[cnt] = legs.steps[i].stations[j - 1].name;
-                              codelist[cnt] =
-                                legs.steps[i].stations[j - 1].displayCode;
-                              cnt++;
-                            } else {
-                              placelist[count] =
-                                legs.steps[i].stations[j - 1].placeId;
-                              starthourlist[count] = legs.steps[
-                                i
-                              ].arrivalTime.substring(11, 13);
-                              startMinlist[count] = legs.steps[
-                                i
-                              ].arrivalTime.substring(14, 16);
-                              startseclist[count] = legs.steps[
-                                i
-                              ].arrivalTime.substring(17, 19);
+                              starthourlist[count] = setTime.hour;
+                              startMinlist[count] = setTime.minute;
+                              startseclist[count] = setTime.second;
+                              stationcntlist[count] =
+                                legs.steps[i].stations.length;
                               count++;
-                            }
-                            transcount++;
-                          }
 
-                          console.log("placelist", placelist);
+                              for (
+                                j = 0;
+                                j < legs.steps[i].stations.length;
+                                j++
+                              ) {
+                                console.log(legs.steps[i].stations[j].name);
+                              }
+                              if (i + 1 != legs.steps.length) {
+                                list[cnt] = legs.steps[i].stations[j - 1].name; //환승역 이름 담기
+                                codelist[cnt] =
+                                  legs.steps[i].stations[j - 1].displayCode; //환승역 코드 담기
+                                cnt++;
+                              } else {
+                                starthourlist[count] = legs.steps[
+                                  i
+                                ].arrivalTime.substring(11, 13);
+                                startMinlist[count] = legs.steps[
+                                  i
+                                ].arrivalTime.substring(14, 16);
+                                startseclist[count] = legs.steps[
+                                  i
+                                ].arrivalTime.substring(17, 19);
+                                count++;
+                              }
+                              transcount++;
+                            } else {
+                            }
+                          }
+                          console.log("출발지와 목적지의 장소 넘버", placelist);
+                          console.log(startOK);
+                          console.log(transferOK);
                           console.log(
                             "환승역과 환승역 사이의 역 개수",
                             stationcntlist

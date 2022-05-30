@@ -76,17 +76,20 @@ const DetailsScreen = ({ route, navigation }) => {
           >
             {SName}
           </Text>
-          <Text
-            style={
-              startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]
-            }
-          >
-            &darr;
-          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={
+                startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]
+              }
+            >
+              &darr;
+            </Text>
+            <Text>{stationcntlist[0]}개역 이동</Text>
+          </View>
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={[styles.middle, { flex: `${index - 1}` }]}>
+            <View style={[styles.middle, { flex: index - 1 }]} key={index}>
               <Text
                 key={index}
                 style={
@@ -101,13 +104,18 @@ const DetailsScreen = ({ route, navigation }) => {
               >
                 {Tname[index]}
               </Text>
-              <Text
-                style={
-                  startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]
-                }
-              >
-                &darr;
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  style={
+                    startOKColor
+                      ? styles.arrow
+                      : [styles.arrow, styles.failArrow]
+                  }
+                >
+                  &darr;
+                </Text>
+                <Text>{stationcntlist[index + 1]}개역 이동</Text>
+              </View>
             </View>
           ))}
         </View>
