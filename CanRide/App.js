@@ -49,7 +49,7 @@ let minutes = ("0" + today.getMinutes()).slice(-2);
 let seconds = ("0" + today.getSeconds()).slice(-2);
 let daylabel = today.getDay();
 
-const app = ({ navigation }) => {
+const MapScreen = ({ navigation }) => {
   const [initialRegion, setInitialRegion] = useState({
     latitude: 37.548014,
     longitude: 127.074658,
@@ -359,6 +359,16 @@ const app = ({ navigation }) => {
                             console.log("", placelist);
                             console.log("환승역", list);
                             console.log("대표역 색상", listColor);
+                            navigation.navigate("Details", {
+                              S: ccode,
+                              SName: ccodeName,
+                              Lcolor: listColor,
+                              cnt: cnt,
+                              Tname: list,
+                              T: codelist,
+                              E: destination,
+                              EName: desName,
+                            });
                           })
                         );
                     }
@@ -372,6 +382,41 @@ const app = ({ navigation }) => {
     </Wrapper>
   );
 };
+
+const DetailsScreen = ({ route, navigation }) => {
+  const { S, SName, E, EName, T, Tname, Lcolor, cnt } = route.params;
+  return (
+    <View style={styles.DetailContainer}>
+      <View style={styles.start}>
+        <Text style={[styles.startName, { color: Lcolor[0] }]}>시작역</Text>
+        <Text>{S}</Text>
+        <Text>{SName}</Text>
+      </View>
+
+      <View style={styles.transfer}>
+        <Text style={[styles.transferName, { color: Lcolor[1] }]}>환승역</Text>
+        <Text>{T}</Text>
+        <Text>{Tname}</Text>
+      </View>
+      <View style={styles.end}>
+        <Text style={[styles.endName, { color: Lcolor[cnt] }]}>도착역</Text>
+        <Text>{E}</Text>
+        <Text>{EName}</Text>
+      </View>
+    </View>
+  );
+};
+
+function app() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Map">
+        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default app;
 
