@@ -33,6 +33,12 @@ import styles from "../styles";
 import { FontAwsome } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
 //import { TouchableOpacity } from "react-native-gesture-handler";
+import allclear from "../JSon/allclear.json";
+import transferno from "../JSON/transferno.json";
+import nonego from "../JSON/nonego.json";
+import stopsameline from "../JSON/가다끊김.json";
+import test from "../test.json";
+
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 //const desc = [];
@@ -276,6 +282,7 @@ function MapScreen({ navigation }) {
                     console.log("출발지 코드 : ", ccode);
 
                     const URL = `https://map.naver.com/v5/api/transit/directions/subway?start=${ccode}&goal=${destination}&departureTime=${year}-${month}-${date}T${hours}%3A${minutes}%3A${seconds}`;
+
                     console.log(URL);
                     if (destination === "") {
                       Alert.alert("도착지에 대한 정보가 없습니다!");
