@@ -49,6 +49,10 @@ const DetailsScreen = ({ route, navigation }) => {
     sLng,
     eLat,
     eLng,
+    stationcntlist,
+    starthourlist,
+    startMinlist,
+    startseclist,
   } = route.params;
 
   let Possible;
@@ -82,8 +86,9 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={styles.middle}>
+            <View style={[styles.middle, { flex: `${index - 1}` }]}>
               <Text
+                key={index}
                 style={
                   startOKColor
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
