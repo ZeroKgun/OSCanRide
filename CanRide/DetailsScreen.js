@@ -62,32 +62,45 @@ const DetailsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.DetailContainer}>
-      <View style={styles.start}>
-        <Text style={startOKColor ?
-          [styles.startName, { color: Lcolor[0] }] :
-          [styles.startName, { color: Lcolor[0] }, styles.fail]}>
-          {SName}
-        </Text>
+      <View style={styles.leftWrap}>
+        <View style={styles.start}>
+          <Text style={startOKColor ?
+            [styles.startName, { color: Lcolor[0] }] :
+            [styles.startName, { color: Lcolor[0] }, styles.fail]}>
+            {SName}
+          </Text>
+          <Text style={startOKColor ?
+            styles.arrow :
+            [styles.arrow, styles.failArrow]}>
+            &darr;
+          </Text>
+        </View>
+        <View style={styles.transfer}>
+          {Tname.map((transfer, index) => (
+            <View style={styles.middle}>
+              <Text style={startOKColor ?
+                [styles.transferName, { color: Lcolor[index + 1] }] :
+                [styles.transferName, { color: Lcolor[index + 1] }, styles.fail]}>
+                {Tname[index]}
+              </Text>
+              <Text style={startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]}>&darr;</Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.end}>
+          <Text style={startOKColor ?
+            [styles.endName, { color: Lcolor[cnt] }] :
+            [styles.endName, { color: Lcolor[cnt] }, styles.fail]}>
+            {EName}
+          </Text>
+        </View>
       </View>
-
-      <View style={styles.transfer}>
-        {Tname.map((transfer, index) => (
-          <View style={styles.middle}>
-            <Text style={startOKColor ?
-              [styles.transferName, { color: Lcolor[index + 1] }] :
-              [styles.transferName, { color: Lcolor[index + 1] }, styles.fail]}>
-              {Tname[index]}
-            </Text>
+      <View style={styles.rightWrap}>
+        <View stlye={styles.boxWrap}>
+          <View style={styles.additionalInformation}>
+            <Text style={styles.PName}>{Possible}</Text>
           </View>
-        ))}
-      </View>
-      <View style={styles.end}>
-        <Text style={startOKColor ?
-          [styles.endName, { color: Lcolor[cnt] }] :
-          [styles.endName, { color: Lcolor[cnt] }, styles.fail]}>
-          {EName}
-          {Possible}
-        </Text>
+        </View>
       </View>
     </View>
   );
