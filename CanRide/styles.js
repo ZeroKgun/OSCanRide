@@ -104,8 +104,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: 'flex-start',
   },
+  leftWrap: {
+    width: '60%',
+  },
+  rightWrap: {
+    marginTop: 40,
+    width: '37%',
+  },
+  additionalInformation: {
+    padding: 20,
+    borderWidth: 5,
+    borderRadius: 15,
+    borderColor: "green",
+  },
   fail: {
     borderColor: 'red',
+  },
+  failArrow: {
+    color: "red",
   },
   PName: {
     fontSize: 20,
@@ -126,6 +142,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "500",
     textAlign: 'center',
+  },
+  arrow: {
+    fontSize: 58,
+    color: "green",
   },
   middle: {
     flex: 1.2,
