@@ -93,7 +93,7 @@ const DetailsScreen = ({ route, navigation }) => {
             [styles.endName, { color: Lcolor[cnt] }, styles.fail]}>
             {EName}
           </Text>
-        </View>
+        </View>ㅁ
       </View>
       <View style={styles.rightWrap}>
         <View stlye={styles.boxWrap}>
