@@ -388,6 +388,8 @@ function MapScreen({ navigation }) {
                             sLng: ccodelng,
                             eLat: endlat,
                             eLng: endlng,
+                            startOKColor: startOK,
+                            tranferOKColor: transferOK,
                           });
                         })
                       );
