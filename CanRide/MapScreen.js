@@ -195,13 +195,17 @@ function MapScreen({ navigation }) {
                       }
                     }}
                   >
-                    <Text style={{ color: "white" }}>목적지 설정</Text>
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      목적지 설정
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.button}
                     onPress={set_fistDestination}
                   >
-                    <Text style={{ color: "white" }}>목적지 초기화</Text>
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      목적지 초기화
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -217,12 +221,14 @@ function MapScreen({ navigation }) {
               width: SCREEN_WIDTH / 2,
               position: "absolute",
               zIndex: 2,
-              bottom: SCREEN_HEIGHT - 90,
+              bottom: SCREEN_HEIGHT - 95,
             },
           ]}
           onPress={pressButton}
         >
-          <Text style={{ color: "white" }}>목적지 설정</Text>
+          <Text style={{ fontSize: 15, textAlign: "center", color: "white" }}>
+            목적지 설정
+          </Text>
         </TouchableOpacity>
         <MapView
           initialRegion={initialRegion}
