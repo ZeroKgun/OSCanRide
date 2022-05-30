@@ -21,15 +21,15 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import metro from "./metro.json";
+import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "./서울시 지하철역 정보 검색 (역명).json";
+import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
 import haversine from "haversine-distance";
 //import { LinearGradient } from "expo-linear-gradient";
 //import { NavigationContainer } from "@react-navigation/native";
 //import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import styles from "./styles";
+import styles from "../styles";
 import { FontAwsome } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
 //import { TouchableOpacity } from "react-native-gesture-handler";
@@ -86,6 +86,7 @@ function MapScreen({ navigation }) {
   const handleDestination = () => {
     setDestination("");
     setDesName("");
+
     console.log(searchValue);
     var station_code = code.DATA;
     var metroData = metro;
@@ -103,7 +104,6 @@ function MapScreen({ navigation }) {
             setDeslng(metroData[i].lng);
           }
         }
-
         isCorrect = 1;
       }
     }
@@ -188,20 +188,24 @@ function MapScreen({ navigation }) {
                     style={styles.button}
                     onPress={() => {
                       if (inputText === "") {
-                        Alert.alert("도착지에 대한 정보가 없습니다!");
+                        Alert.alert("도착지 이름을 입력해주세요!");
                       } else {
                         handleDestination();
                         setModalVisible(!modalVisible);
                       }
                     }}
                   >
-                    <Text style={{ color: "white" }}>목적지 설정</Text>
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      목적지 설정
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.button}
                     onPress={set_fistDestination}
                   >
-                    <Text style={{ color: "white" }}>목적지 초기화</Text>
+                    <Text style={{ textAlign: "center", color: "white" }}>
+                      목적지 초기화
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -217,12 +221,14 @@ function MapScreen({ navigation }) {
               width: SCREEN_WIDTH / 2,
               position: "absolute",
               zIndex: 2,
-              bottom: SCREEN_HEIGHT - 90,
+              bottom: SCREEN_HEIGHT - 95,
             },
           ]}
           onPress={pressButton}
         >
-          <Text style={{ color: "white" }}>목적지 설정</Text>
+          <Text style={{ fontSize: 15, textAlign: "center", color: "white" }}>
+            목적지 설정
+          </Text>
         </TouchableOpacity>
         <MapView
           initialRegion={initialRegion}
@@ -280,6 +286,10 @@ function MapScreen({ navigation }) {
                           let count = 0; //출발지와 목적지
                           let placelist = [];
                           let list = [];
+                          let stationcntlist = [];
+                          let starthourlist = [];
+                          let startMinlist = [];
+                          let startseclist = [];
                           let codelist = [];
                           let listColor = [];
                           const legs = data.data.paths[0].legs[0];
@@ -339,15 +349,33 @@ function MapScreen({ navigation }) {
                               data.data.paths[0].fares[0].routes[
                                 i / 2
                               ][0].type.color;
-                            var setTime = legs.steps[i].departureTime.substring(
-                              11,
-                              13
-                            );
-                            console.log(setTime);
+                            var setTime = {
+                              hour: legs.steps[i].departureTime.substring(
+                                11,
+                                13
+                              ),
+                              minute: legs.steps[i].departureTime.substring(
+                                14,
+                                16
+                              ),
+                              second: legs.steps[i].departureTime.substring(
+                                17,
+                                19
+                              ),
+                            };
                             console.log(
-                              "타는 시간",
-                              legs.steps[i].departureTime
+                              setTime.hour,
+                              "시",
+                              setTime.minute,
+                              "분",
+                              setTime.second,
+                              "초에 지하철 도착"
                             );
+                            starthourlist[count] = setTime.hour;
+                            startMinlist[count] = setTime.minute;
+                            startseclist[count] = setTime.second;
+                            stationcntlist[count] =
+                              legs.steps[i].stations.length;
                             placelist[count] =
                               legs.steps[i].stations[0].placeId;
                             count++;
@@ -366,11 +394,31 @@ function MapScreen({ navigation }) {
                             } else {
                               placelist[count] =
                                 legs.steps[i].stations[j - 1].placeId;
+                              starthourlist[count] = legs.steps[
+                                i
+                              ].arrivalTime.substring(11, 13);
+                              startMinlist[count] = legs.steps[
+                                i
+                              ].arrivalTime.substring(14, 16);
+                              startseclist[count] = legs.steps[
+                                i
+                              ].arrivalTime.substring(17, 19);
                               count++;
                             }
                             transcount++;
                           }
+
                           console.log("placelist", placelist);
+                          console.log(
+                            "환승역과 환승역 사이의 역 개수",
+                            stationcntlist
+                          );
+                          console.log(
+                            "환승역과 출발역에서 타야하는 시간, 마지막은 도착시간",
+                            starthourlist,
+                            startMinlist,
+                            startseclist
+                          );
                           console.log("환승역", list);
                           console.log("대표역 색상", listColor);
                           navigation.navigate("Details", {
@@ -390,6 +438,10 @@ function MapScreen({ navigation }) {
                             eLng: endlng,
                             startOKColor: startOK,
                             tranferOKColor: transferOK,
+                            stationcntlist: stationcntlist,
+                            starthourlist: starthourlist,
+                            startMinlist: startMinlist,
+                            startseclist: startseclist,
                           });
                         })
                       );
