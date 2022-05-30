@@ -1,28 +1,6 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
-  fetch,
-} from "react-native";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import metro from "../JSON/metro.json";
-//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
-import axios from "axios";
-import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text, View } from "react-native";
 import styles from "../styles";
 import WalkMan from "../animeJS/WalkMan";
 

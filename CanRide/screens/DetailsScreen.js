@@ -1,34 +1,12 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-  Animated,
-  TouchableWithoutFeedback,
-  PanResponder,
-  KeyboardAvoidingView,
-} from "react-native";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
+import { Text, View, TouchableOpacity } from "react-native";
+
 import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
-import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import styles from "../styles";
 
 const DetailsScreen = ({ route, navigation }) => {
@@ -42,7 +20,7 @@ const DetailsScreen = ({ route, navigation }) => {
     E,
     EName,
     startOKColor,
-    tranferOKColor,
+    transferOKColor,
     //건영이 추가
     PT,
     sLat,
@@ -153,7 +131,7 @@ const DetailsScreen = ({ route, navigation }) => {
                   eLine = station_code[i]["line_num"];
                 }
               }
-              const desID = PT[PT.length - 1];
+              const desID = PT[1];
               const walk_url = encodeURI(
                 `https://map.naver.com/v5/api/dir/findwalk?lo=ko&st=1&o=all&l=${sLng},${sLat},${SName}역%2${sLine},${PT[0]};${eLng},${eLat},${EName}역%2${eLine},${desID}&lang=ko`
               );

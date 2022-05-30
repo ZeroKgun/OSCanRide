@@ -55,8 +55,8 @@ function BikeScreen({ route, navigation }) {
   const howHard = () => {
     {
       if (distance > 6000) {
-        return <Text style={[{ color: "red" }]}>조금 빡세요!^^</Text>;
-      } else if (distance <= 6000 && distance >= 1000) {
+        return <Text style={[{ color: "red" }]}>멀어요!</Text>;
+      } else if (distance <= 6000 && distance >= 2000) {
         return <Text style={[{ color: "orange" }]}>할만해요!</Text>;
       } else {
         return <Text style={[{ color: "green" }]}>코앞이네!</Text>;

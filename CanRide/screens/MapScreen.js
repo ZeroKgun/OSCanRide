@@ -1,39 +1,26 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
 import {
-  StyleSheet,
   Text,
   View,
   Dimensions,
   Alert,
   TextInput,
-  FlatList,
-  Button,
   TouchableOpacity,
   Modal,
-  Pressable,
-  Animated,
   TouchableWithoutFeedback,
-  PanResponder,
-  KeyboardAvoidingView,
 } from "react-native";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import metro from "../JSON/metro.json";
-//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
 import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-//import { NavigationContainer } from "@react-navigation/native";
-//import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import styles from "../styles";
-import { FontAwsome } from "@expo/vector-icons";
-import { StackActions } from "@react-navigation/native";
-//import { TouchableOpacity } from "react-native-gesture-handler";
-import allclear from "../JSon/allclear.json";
+
+import metro from "../JSON/metro.json";
+import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
+import allclear from "../JSON/allclear.json";
 import transferno from "../JSON/transferno.json";
 import nonego from "../JSON/nonego.json";
 import stopsameline from "../JSON/가다끊김.json";
@@ -315,9 +302,10 @@ function MapScreen({ navigation }) {
                           placelist[ccnt] = legs.steps[0].stations[0].placeId;
                           ccnt++;
                           placelist[ccnt] =
-                            legs.steps[
-                              legs.steps.length - 1
-                            ].stations[0].placeId;
+                            legs.steps[legs.steps.length - 1].stations[
+                              legs.steps[legs.steps.length - 1].stations
+                                .length - 1
+                            ].placeId;
                           for (i = 0; i < legs.steps.length; i = i + 2) {
                             if (
                               i === legs.steps.length ||
@@ -451,7 +439,7 @@ function MapScreen({ navigation }) {
                             eLat: endlat,
                             eLng: endlng,
                             startOKColor: startOK,
-                            tranferOKColor: transferOK,
+                            transferOKColor: transferOK,
                             stationcntlist: stationcntlist,
                             starthourlist: starthourlist,
                             startMinlist: startMinlist,
