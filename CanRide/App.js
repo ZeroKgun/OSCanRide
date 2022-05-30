@@ -2,12 +2,11 @@ import * as React from "react";
 //import MapView from "react-native-maps";
 import {
   StyleSheet,
-  View,
   Text,
+  View,
   Dimensions,
   Alert,
   TextInput,
-  Button,
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
@@ -17,8 +16,11 @@ import { useState, useEffect, useRef } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import metro from "./metro.json";
-import code from "./서울시 지하철역 정보 검색 (역명).json";
+//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
+import code from "./서울시 지하철역 정보 검색 (역명)";
 import axios from "axios";
+import haversine from "haversine-distance";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
@@ -47,11 +49,20 @@ const app = ({ navigation }) => {
   const [inputText, setInputText] = useState("");
   const [destination, setDestination] = useState("");
   const [desName, setDesName] = useState("");
+  const [deslat, setDeslat] = useState("");
+  const [deslng, setDeslng] = useState("");
   const [searchValue, setSearchValue] = useState("");
-
+  const ccode = {};
+  let ccodelat = "";
+  let ccodelng = "";
   const [modalVisible, setModalVisible] = useState(true);
 
-  const ccode = {};
+  var array = metro.map(function (item) {
+    return {
+      latitude: item.lat,
+      longitude: item.lng,
+    };
+  });
 
   const updateMapStyle = () => {
     setMapWidth("100%");
@@ -74,7 +85,12 @@ const app = ({ navigation }) => {
       ) {
         setDestination(station_code[i]["fr_code"]);
         setDesName(station_code[i]["station_nm"]);
-
+        for (var j = 0; j < metroData.length; j++) {
+          if (desName === metroData[i].name) {
+            setDeslat(metroData[i].lat);
+            setDeslng(metroData[i].lng);
+          }
+        }
         isCorrect = 1;
       }
     }
@@ -83,12 +99,14 @@ const app = ({ navigation }) => {
     }
     console.log("도착지 코드 : ", destination);
     console.log("도착지 이름 : ", desName);
+    console.log("도착지 위도 경도", deslat, deslng);
     //setInputText("");
     return destination, desName;
   };
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLogitude] = useState(null);
   // Get current location information
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -99,6 +117,22 @@ const app = ({ navigation }) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      for (var i = 0; i < array.length; i++) {
+        const a = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        const b = {
+          latitude: array[i].lat,
+          longitude: array[i].lng,
+        };
+        //console.log(haversine(a, b));
+        if (haversine(a, b) <= 2000) {
+          ccode.latitude = array[i].lat;
+          ccode.longitude = array[i].lng;
+          desc.push(ccode);
+        }
+      }
     })();
   }, []);
 
@@ -212,6 +246,7 @@ const app = ({ navigation }) => {
                     //Alert.alert(ccode);
                     var station_code = code.DATA;
                     var ccode = "";
+                    var ccodeName = "";
 
                     for (var i = 0; i < station_code.length; i++) {
                       if (station_code[i]["station_nm"] === marker.name) {
@@ -221,26 +256,51 @@ const app = ({ navigation }) => {
                         ccodelng = marker.lng;
                       }
                     }
-                    console.log("출발지 역이름 : ", ccodeName);
                     console.log("출발지 코드 : ", ccode);
 
                     const URL = `https://map.naver.com/v5/api/transit/directions/subway?start=${ccode}&goal=${destination}&departureTime=${year}-${month}-${date}T${hours}%3A${minutes}%3A${seconds}`;
-                    const sta = "";
+
                     console.log(URL);
                     if (destination === "") {
                       Alert.alert("도착지에 대한 정보가 없습니다!");
                     } else {
-                      axios.get(URL).then((data) => {
-                        const legs = data.data.paths[0].legs[0];
-                        var i,
-                          j = 0;
+                      axios.all([axios.get(URL)]).then(
+                        axios.spread((data) => {
+                          let cnt = 0; //환승역 갯수
+                          let count = 0; //출발지와 목적지
+                          let codelist = [];
+                          let list = [];
 
-                        for (i = 0; i < legs.steps.length; i = i + 2) {
-                          for (j = 0; j < legs.steps[i].stations.length; j++) {
-                            console.log(legs.steps[i].stations[j].name);
+                          const legs = data.data.paths[0].legs[0];
+                          var i,
+                            j = 0;
+
+                          for (i = 0; i < legs.steps.length; i = i + 2) {
+                            var setTime = legs.steps[i].departureTime.substring(
+                              11,
+                              13
+                            );
+                            //var sethour = setTime.split("T");
+                            console.log(setTime);
+
+                            for (
+                              j = 0;
+                              j < legs.steps[i].stations.length;
+                              j++
+                            ) {
+                              console.log(legs.steps[i].stations[j].name);
+                            }
+                            if (i + 1 != legs.steps.length) {
+                              list[cnt] = legs.steps[i].stations[j - 1].name;
+                              codelist[cnt] =
+                                legs.steps[i].stations[j - 1].displayCode;
+                              cnt++;
+                            }
                           }
-                        }
-                      });
+                          console.log("", codelist);
+                          console.log("환승역", list);
+                        })
+                      );
                     }
                   }
                 }}
