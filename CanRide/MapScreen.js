@@ -65,6 +65,8 @@ function MapScreen({ navigation }) {
   const ccode = {};
   let ccodelat = "";
   let ccodelng = "";
+  let endlat = "";
+  let endlng = "";
   const [modalVisible, setModalVisible] = useState(true);
 
   var array = metro.map(function (item) {
@@ -81,7 +83,6 @@ function MapScreen({ navigation }) {
   const set_fistDestination = () => {
     setInputText("");
   };
-
   const handleDestination = () => {
     setDestination("");
     setDesName("");
@@ -118,8 +119,8 @@ function MapScreen({ navigation }) {
 
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLogitude] = useState(null);
-  // Get current location information
 
+  // Get current location information
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -233,16 +234,7 @@ function MapScreen({ navigation }) {
             updateMapStyle();
           }}
         >
-          {/* <Marker
-          coordinate={{
-            latitude: desc[1].latitude,
-            longitude: desc[1].longitude,
-          }}
-          title="this is a marker"
-          description="this is a marker example"
-        /> */}
           {metro.map((marker, index) => {
-            //console.log("marker", marker);
             return (
               <Marker
                 key={index}
@@ -256,7 +248,6 @@ function MapScreen({ navigation }) {
                   if (inputText === "") {
                     Alert.alert("도착지에 대한 정보가 없습니다!");
                   } else {
-                    //Alert.alert(ccode);
                     var station_code = code.DATA;
                     var ccode = "";
                     var ccodeName = "";
@@ -270,146 +261,136 @@ function MapScreen({ navigation }) {
                         ccodelng = marker.lng;
                       }
                     }
+                    for (var j = 0; j < metro.length; j++) {
+                      if (metro[j].name === inputText) {
+                        endlat = metro[j].lat;
+                        endlng = metro[j].lng;
+                      }
+                    }
                     console.log("출발지 코드 : ", ccode);
 
                     const URL = `https://map.naver.com/v5/api/transit/directions/subway?start=${ccode}&goal=${destination}&departureTime=${year}-${month}-${date}T${hours}%3A${minutes}%3A${seconds}`;
-                    const lastmetro = `https://map.naver.com/v5/api/transit/subway/stations/${ccode}/schedule?lang=ko&stationID=${ccode}`;
-                    const startURL = `https://map.naver.com/v5/api/transit/realtime/arrivals?lang=ko&station%5B%5D=${ccode}`;
-                    const DesURL = `https://map.naver.com/v5/api/transit/realtime/arrivals?lang=ko&station%5B%5D=${destination}`;
-
-                    const sta = "";
                     console.log(URL);
                     if (destination === "") {
                       Alert.alert("도착지에 대한 정보가 없습니다!");
                     } else {
-                      axios
-                        .all([
-                          axios.get(URL),
-                          axios.get(lastmetro),
-                          axios.get(startURL),
-                          axios.get(DesURL),
-                        ])
-                        .then(
-                          axios.spread((data, time, startData, desData) => {
-                            let cnt = 0; //환승역 갯수
-                            let count = 0; //출발지와 목적지
-                            let placelist = [];
-                            let list = [];
-                            let codelist = [];
-                            let listColor = [];
-                            const legs = data.data.paths[0].legs[0];
-                            var i,
-                              j = 0;
-                            let transcount = 0;
-                            let startOK = true; //출발지 탑승 가능 색깔
-                            let transferOK = []; //환승역 탑승 가능 색깔
-                            //detail에 넘겨줄 부분이
-                            //몇정거장인지
-                            //탑승 가능 여부 변수
-                            //걸리는 시간
-                            //환승역
-                            // startColor =
-                            //   data.data.paths[0].fares[0].routes[0][i].type
-                            //     .color;
-                            // console.log("출발지 컬러", startColor);
-                            // listColor[cnt] =
-                            //   data.data.paths[0].fares[0].routes[0][0].type.color;
-                            for (i = 0; i < legs.steps.length; i = i + 2) {
-                              if (
-                                i === legs.steps.length ||
-                                i === legs.steps.length - 1
-                              ) {
-                                transcount = transcount - 1;
-                              }
-                              if (data.data.paths[0].shutdown === true) {
-                                console.log("지하철이 처음부터 끊겼다능");
-                                startOK = false;
-                              } else if (
-                                data.data.paths[0].fares[0].routes.length > 2 &&
+                      axios.all([axios.get(URL)]).then(
+                        axios.spread((data) => {
+                          let cnt = 0; //환승역 갯수
+                          let count = 0; //출발지와 목적지
+                          let placelist = [];
+                          let list = [];
+                          let codelist = [];
+                          let listColor = [];
+                          const legs = data.data.paths[0].legs[0];
+                          var i,
+                            j = 0;
+                          let transcount = 0;
+                          let startOK = true;
+                          let transferOK = [];
+                          //detail에 넘겨줄 부분이
+                          //몇정거장인지
+                          //탑승 가능 여부 변수
+                          //걸리는 시간
+                          //환승역
+                          for (i = 0; i < legs.steps.length; i = i + 2) {
+                            if (
+                              i === legs.steps.length ||
+                              i === legs.steps.length - 1
+                            ) {
+                              transcount = transcount - 1;
+                            }
+                            if (data.data.paths[0].shutdown === true) {
+                              console.log("지하철이 처음부터 끊겼다!");
+                              startOK = false;
+                            } else if (
+                              data.data.paths[0].fares[0].routes.length > 2 &&
+                              data.data.paths[0].fares[0].routes[transcount][0]
+                                .type.id ===
                                 data.data.paths[0].fares[0].routes[
-                                  transcount
-                                ][0].type.id ===
-                                  data.data.paths[0].fares[0].routes[
-                                    transcount + 1
-                                  ][0].type.id
-                              ) {
-                                console.log(
-                                  "지하철이 가다가 끝까지 못가고 멈췄다능"
-                                );
-                                transferOK[transcount] = false;
-                              } else if (
-                                data.data.paths[0].fares[0].routes.length ===
-                                  2 &&
-                                data.data.paths[0].fares[0].routes[0][0].type
-                                  .id ===
-                                  data.data.paths[0].fares[0].routes[1][0].type
-                                    .id
-                              ) {
-                                console.log(
-                                  "지하철이 가다가 끝까지 못가고 멈췄다능"
-                                );
-                                startOK = false;
-                              } else if (
-                                data.data.paths[0].legs[0].steps[i].shutdown ===
-                                true
-                              ) {
-                                console.log("환승을 못하고 지하철이 끊겼다능");
-                                transferOK[transcount] = false;
-                              } else {
-                                console.log("가자잇!");
-                              }
-
-                              listColor[i / 2] =
-                                data.data.paths[0].fares[0].routes[
-                                  i / 2
-                                ][0].type.color;
-                              var setTime = legs.steps[
-                                i
-                              ].departureTime.substring(11, 13);
-                              console.log(setTime);
+                                  transcount + 1
+                                ][0].type.id
+                            ) {
                               console.log(
-                                "타는 시간",
-                                legs.steps[i].departureTime
+                                "지하철이 가다가 끝까지 못가고 멈췄다!"
                               );
-                              placelist[count] =
-                                legs.steps[i].stations[0].placeId;
-                              count++;
-                              for (
-                                j = 0;
-                                j < legs.steps[i].stations.length;
-                                j++
-                              ) {
-                                console.log(legs.steps[i].stations[j].name);
-                              }
-                              if (i + 1 != legs.steps.length) {
-                                list[cnt] = legs.steps[i].stations[j - 1].name;
-                                codelist[cnt] =
-                                  legs.steps[i].stations[j - 1].displayCode;
-                                cnt++;
-                              } else {
-                                placelist[count] =
-                                  legs.steps[i].stations[j - 1].placeId;
-                                count++;
-                              }
-                              transcount++;
+                              transferOK[transcount] = false;
+                            } else if (
+                              data.data.paths[0].fares[0].routes.length === 2 &&
+                              data.data.paths[0].fares[0].routes[0][0].type
+                                .id ===
+                                data.data.paths[0].fares[0].routes[1][0].type.id
+                            ) {
+                              console.log(
+                                "지하철이 가다가 끝까지 못가고 멈췄다!"
+                              );
+                              startOK = false;
+                            } else if (
+                              data.data.paths[0].legs[0].steps[i].shutdown ===
+                              true
+                            ) {
+                              console.log("환승을 못하고 지하철이 끊겼다!");
+                              transferOK[transcount] = false;
+                            } else {
+                              console.log("가자!");
                             }
 
-                            //출발 역과 끝 역의 리스트넘버
-                            console.log("", placelist);
-                            console.log("환승역", list);
-                            console.log("대표역 색상", listColor);
-                            navigation.navigate("Details", {
-                              S: ccode,
-                              SName: ccodeName,
-                              Lcolor: listColor,
-                              cnt: cnt,
-                              Tname: list,
-                              T: codelist,
-                              E: destination,
-                              EName: desName,
-                            });
-                          })
-                        );
+                            listColor[i / 2] =
+                              data.data.paths[0].fares[0].routes[
+                                i / 2
+                              ][0].type.color;
+                            var setTime = legs.steps[i].departureTime.substring(
+                              11,
+                              13
+                            );
+                            console.log(setTime);
+                            console.log(
+                              "타는 시간",
+                              legs.steps[i].departureTime
+                            );
+                            placelist[count] =
+                              legs.steps[i].stations[0].placeId;
+                            count++;
+                            for (
+                              j = 0;
+                              j < legs.steps[i].stations.length;
+                              j++
+                            ) {
+                              console.log(legs.steps[i].stations[j].name);
+                            }
+                            if (i + 1 != legs.steps.length) {
+                              list[cnt] = legs.steps[i].stations[j - 1].name;
+                              codelist[cnt] =
+                                legs.steps[i].stations[j - 1].displayCode;
+                              cnt++;
+                            } else {
+                              placelist[count] =
+                                legs.steps[i].stations[j - 1].placeId;
+                              count++;
+                            }
+                            transcount++;
+                          }
+                          console.log("placelist", placelist);
+                          console.log("환승역", list);
+                          console.log("대표역 색상", listColor);
+                          navigation.navigate("Details", {
+                            S: ccode,
+                            SName: ccodeName,
+                            Lcolor: listColor,
+                            cnt: cnt,
+                            Tname: list,
+                            T: codelist,
+                            E: destination,
+                            EName: desName,
+                            //건영이 추가
+                            PT: placelist,
+                            sLat: ccodelat,
+                            sLng: ccodelng,
+                            eLat: endlat,
+                            eLng: endlng,
+                          });
+                        })
+                      );
                     }
                   }
                 }}
