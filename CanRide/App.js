@@ -385,6 +385,17 @@ const MapScreen = ({ navigation }) => {
 
 const DetailsScreen = ({ route, navigation }) => {
   const { S, SName, E, EName, T, Tname, Lcolor, cnt } = route.params;
+  const transferlist = () => {
+    return Tname.map((element, index) => {
+      return (
+        <View key={index}>
+          <Text style={[styles.transferName, { color: Lcolor[index + 1] }]}>환승역</Text>
+          <Text>{Tname[index]}</Text>
+        </View>
+      )
+    })
+  }
+
   return (
     <View style={styles.DetailContainer}>
       <View style={styles.start}>
@@ -393,11 +404,7 @@ const DetailsScreen = ({ route, navigation }) => {
         <Text>{SName}</Text>
       </View>
 
-      <View style={styles.transfer}>
-        <Text style={[styles.transferName, { color: Lcolor[1] }]}>환승역</Text>
-        <Text>{T}</Text>
-        <Text>{Tname}</Text>
-      </View>
+      <View style={styles.transfer}>{transferlist()}</View>
       <View style={styles.end}>
         <Text style={[styles.endName, { color: Lcolor[cnt] }]}>도착역</Text>
         <Text>{E}</Text>
@@ -411,8 +418,18 @@ function app() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Map">
-        <Stack.Screen name="Map" component={MapScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{
+            headerShown: false
+          }} />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
+          options={{
+            headerShown: false
+          }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -434,7 +451,19 @@ const styles = StyleSheet.create({
   background: {
     flex: 0,
   },
-
+  bottomSheetContainer: {
+    height: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  rootContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   map: {
     flex: 1,
     width: "100%",
@@ -449,7 +478,13 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
   },
-
+  iconContainer: {
+    backgroundColor: "#e7e7e7",
+    padding: 7,
+    borderRadius: 10,
+    marginRight: 15,
+  },
+  locationText: {},
   row: {
     flexDirection: "row",
     alignItems: "center",
