@@ -17,7 +17,7 @@ function WalkMan() {
           height: 200,
           //backgroundColor: "#eee",
         }}
-        source={require("./animations/walkman.json")}
+        source={require("../animations/walkman.json")}
       />
     </View>
   );
