@@ -129,7 +129,9 @@ const styles = StyleSheet.create({
     color: "green",
   },
   start: {
-    flex: 1.2,
+    //backgroundColor: "red",
+    paddingTop: 30,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -146,18 +148,21 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 58,
     color: "green",
+    paddingBottom: 0,
   },
   middle: {
-    flex: 1.2,
+    //backgroundColor: "pink",
+    //flex: 3,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   transfer: {
-    flex: 1.2,
+    flex: 3,
     justifyContent: "center",
     alignItems: "center",
   },
+
   transferName: {
     width: "100%",
     padding: 20,
@@ -169,7 +174,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   end: {
-    flex: 1.2,
+    //backgroundColor: "blue",
+    paddingBottom: 30,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
