@@ -7,9 +7,16 @@ import {
   Dimensions,
   Alert,
   TextInput,
+  FlatList,
+  Button,
   TouchableOpacity,
   Modal,
+  Pressable,
+  Animated,
   TouchableWithoutFeedback,
+  PanResponder,
+  KeyboardAvoidingView,
+  LogBox,
 } from "react-native";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
@@ -20,8 +27,14 @@ import metro from "./metro.json";
 import code from "./서울시 지하철역 정보 검색 (역명)";
 import axios from "axios";
 import haversine from "haversine-distance";
-
+import { LinearGradient } from "expo-linear-gradient";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import allclear from "./allclear.json";
+import nonego from "./nonego.json";
+import transferno from "./transferno.json";
+import stopsameline from "./가다끊김.json";
 
 const Stack = createNativeStackNavigator();
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -77,6 +90,7 @@ const app = ({ navigation }) => {
     setDesName("");
     console.log(searchValue);
     var station_code = code.DATA;
+    var metroData = metro;
     let isCorrect = 0;
     for (var i = 0; i < station_code.length; i++) {
       if (
@@ -91,6 +105,7 @@ const app = ({ navigation }) => {
             setDeslng(metroData[i].lng);
           }
         }
+
         isCorrect = 1;
       }
     }
@@ -103,6 +118,7 @@ const app = ({ navigation }) => {
     //setInputText("");
     return destination, desName;
   };
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLogitude] = useState(null);
   // Get current location information
@@ -247,7 +263,8 @@ const app = ({ navigation }) => {
                     var station_code = code.DATA;
                     var ccode = "";
                     var ccodeName = "";
-
+                    var startColor = "";
+                    var destinColor = "";
                     for (var i = 0; i < station_code.length; i++) {
                       if (station_code[i]["station_nm"] === marker.name) {
                         ccode = station_code[i]["fr_code"];
@@ -259,48 +276,91 @@ const app = ({ navigation }) => {
                     console.log("출발지 코드 : ", ccode);
 
                     const URL = `https://map.naver.com/v5/api/transit/directions/subway?start=${ccode}&goal=${destination}&departureTime=${year}-${month}-${date}T${hours}%3A${minutes}%3A${seconds}`;
+                    const lastmetro = `https://map.naver.com/v5/api/transit/subway/stations/${ccode}/schedule?lang=ko&stationID=${ccode}`;
+                    const startURL = `https://map.naver.com/v5/api/transit/realtime/arrivals?lang=ko&station%5B%5D=${ccode}`;
+                    const DesURL = `https://map.naver.com/v5/api/transit/realtime/arrivals?lang=ko&station%5B%5D=${destination}`;
 
+                    const sta = "";
                     console.log(URL);
                     if (destination === "") {
                       Alert.alert("도착지에 대한 정보가 없습니다!");
                     } else {
-                      axios.all([axios.get(URL)]).then(
-                        axios.spread((data) => {
-                          let cnt = 0; //환승역 갯수
-                          let count = 0; //출발지와 목적지
-                          let codelist = [];
-                          let list = [];
-
-                          const legs = data.data.paths[0].legs[0];
-                          var i,
-                            j = 0;
-
-                          for (i = 0; i < legs.steps.length; i = i + 2) {
-                            var setTime = legs.steps[i].departureTime.substring(
-                              11,
-                              13
-                            );
-                            //var sethour = setTime.split("T");
-                            console.log(setTime);
-
-                            for (
+                      axios
+                        .all([
+                          axios.get(URL),
+                          axios.get(lastmetro),
+                          axios.get(startURL),
+                          axios.get(DesURL),
+                        ])
+                        .then(
+                          axios.spread((data, time, startData, desData) => {
+                            let cnt = 0; //환승역 갯수
+                            let count = 0; //출발지와 목적지
+                            let placelist = [];
+                            let list = [];
+                            let codelist = [];
+                            let listColor = [];
+                            const legs = data.data.paths[0].legs[0];
+                            var i,
                               j = 0;
-                              j < legs.steps[i].stations.length;
-                              j++
-                            ) {
-                              console.log(legs.steps[i].stations[j].name);
+                            // startColor =
+                            //   data.data.paths[0].fares[0].routes[0][i].type
+                            //     .color;
+                            // console.log("출발지 컬러", startColor);
+                            // listColor[cnt] =
+                            //   data.data.paths[0].fares[0].routes[0][0].type.color;
+                            for (i = 0; i < legs.steps.length; i = i + 2) {
+                              //console.log(legs.steps[i].routes[0].name); listColor[cnt] =
+                              listColor[i / 2] =
+                                data.data.paths[0].fares[0].routes[
+                                  i / 2
+                                ][0].type.color;
+                              var setTime = legs.steps[
+                                i
+                              ].departureTime.substring(11, 13);
+                              //var sethour = setTime.split("T");
+                              console.log(setTime);
+                              if (
+                                parseInt(setTime) >= 5 &&
+                                parseInt(setTime) <= 6
+                              ) {
+                                console.log("탈수 없노");
+                              } else {
+                                console.log("탈수 있노!");
+                                console.log(
+                                  "타는 시간",
+                                  legs.steps[i].departureTime
+                                );
+                                placelist[count] =
+                                  legs.steps[i].stations[0].placeId;
+                                count++;
+
+                                for (
+                                  j = 0;
+                                  j < legs.steps[i].stations.length;
+                                  j++
+                                ) {
+                                  console.log(legs.steps[i].stations[j].name);
+                                }
+                                if (i + 1 != legs.steps.length) {
+                                  list[cnt] =
+                                    legs.steps[i].stations[j - 1].name;
+                                  codelist[cnt] =
+                                    legs.steps[i].stations[j - 1].displayCode;
+                                  cnt++;
+                                } else {
+                                  placelist[count] =
+                                    legs.steps[i].stations[j - 1].placeId;
+                                  count++;
+                                }
+                              }
                             }
-                            if (i + 1 != legs.steps.length) {
-                              list[cnt] = legs.steps[i].stations[j - 1].name;
-                              codelist[cnt] =
-                                legs.steps[i].stations[j - 1].displayCode;
-                              cnt++;
-                            }
-                          }
-                          console.log("", codelist);
-                          console.log("환승역", list);
-                        })
-                      );
+                            //출발 역과 끝 역의 리스트넘버
+                            console.log("", placelist);
+                            console.log("환승역", list);
+                            console.log("대표역 색상", listColor);
+                          })
+                        );
                     }
                   }
                 }}
