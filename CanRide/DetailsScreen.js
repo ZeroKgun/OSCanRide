@@ -32,33 +32,62 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import styles from "./styles";
 
 const DetailsScreen = ({ route, navigation }) => {
-  const { S, SName, E, EName, T, Tname, Lcolor, cnt } = route.params;
-  const transferlist = () => {
-    return Tname.map((element, index) => {
-      return (
-        <View key={index}>
-          <Text style={[styles.transferName, { color: Lcolor[index + 1] }]}>
-            환승역
-          </Text>
-          <Text>{Tname[index]}</Text>
-        </View>
-      );
-    });
-  };
+  const {
+    S,
+    SName,
+    Lcolor,
+    cnt,
+    Tname,
+    T,
+    E,
+    EName,
+    startOKColor,
+    tranferOKColor,
+    //건영이 추가
+    PT,
+    sLat,
+    sLng,
+    eLat,
+    eLng,
+  } = route.params;
+
+  let Possible;
+
+  if (startOKColor == true) {
+    Possible = "탈 수 이써!";
+  }
+  else {
+    Possible = "탈 수 업써!";
+  }
 
   return (
     <View style={styles.DetailContainer}>
       <View style={styles.start}>
-        <Text style={[styles.startName, { color: Lcolor[0] }]}>시작역</Text>
-        <Text>{S}</Text>
-        <Text>{SName}</Text>
+        <Text style={startOKColor ?
+          [styles.startName, { color: Lcolor[0] }] :
+          [styles.startName, { color: Lcolor[0] }, styles.fail]}>
+          {SName}
+        </Text>
       </View>
 
-      <View style={styles.transfer}>{transferlist()}</View>
+      <View style={styles.transfer}>
+        {Tname.map((transfer, index) => (
+          <View style={styles.middle}>
+            <Text style={startOKColor ?
+              [styles.transferName, { color: Lcolor[index + 1] }] :
+              [styles.transferName, { color: Lcolor[index + 1] }, styles.fail]}>
+              {Tname[index]}
+            </Text>
+          </View>
+        ))}
+      </View>
       <View style={styles.end}>
-        <Text style={[styles.endName, { color: Lcolor[cnt] }]}>도착역</Text>
-        <Text>{E}</Text>
-        <Text>{EName}</Text>
+        <Text style={startOKColor ?
+          [styles.endName, { color: Lcolor[cnt] }] :
+          [styles.endName, { color: Lcolor[cnt] }, styles.fail]}>
+          {EName}
+          {Possible}
+        </Text>
       </View>
     </View>
   );

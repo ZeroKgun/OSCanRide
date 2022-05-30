@@ -100,6 +100,17 @@ const styles = StyleSheet.create({
   DetailContainer: {
     flex: 1,
     backgroundColor: "white",
+    flexDirection: 'row',
+    justifyContent: "space-evenly",
+    alignItems: 'flex-start',
+  },
+  fail: {
+    borderColor: 'red',
+  },
+  PName: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: "green",
   },
   start: {
     flex: 1.2,
@@ -107,9 +118,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   startName: {
-    fontSize: 58,
+    padding: 20,
+    width: '100%',
+    borderColor: "green",
+    borderWidth: 5,
+    borderRadius: 15,
+    fontSize: 30,
     fontWeight: "500",
-    color: "white",
+    textAlign: 'center',
+  },
+  middle: {
+    flex: 1.2,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+
   },
   transfer: {
     flex: 1.2,
@@ -117,9 +140,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   transferName: {
-    fontSize: 58,
+    width: "100%",
+    padding: 20,
+    borderColor: "green",
+    borderWidth: 5,
+    borderRadius: 15,
+    fontSize: 30,
     fontWeight: "500",
-    color: "red",
+    textAlign: 'center',
+
   },
   end: {
     flex: 1.2,
@@ -127,9 +156,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   endName: {
-    fontSize: 58,
+    width: '100%',
+    padding: 20,
+    borderColor: "green",
+    borderWidth: 5,
+    borderRadius: 15,
+    fontSize: 30,
     fontWeight: "500",
-    color: "green",
+    textAlign: 'center',
   },
 });
 
