@@ -39,6 +39,7 @@ import stopsameline from "./가다끊김.json";
 import MapScreen from "./MapScreen";
 import DetailsScreen from "./DetailsScreen";
 import LottieView from "lottie-react-native";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
 

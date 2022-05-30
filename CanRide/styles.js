@@ -60,12 +60,13 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   button: {
-    backgroundColor: "#D6C6B6",
+    backgroundColor: "#5DDE7F",
     marginTop: 0,
+    padding: 5,
     alignSelf: "center",
     borderColor: "white",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     padding: 20,
   },
   // button: {
