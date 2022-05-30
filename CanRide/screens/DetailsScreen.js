@@ -89,7 +89,7 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={[styles.middle, { flex: `${index - 1}` }]} key={index}>
+            <View style={[styles.middle, { flex: index - 1 }]} key={index}>
               <Text
                 key={index}
                 style={

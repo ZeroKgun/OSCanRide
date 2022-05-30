@@ -284,6 +284,7 @@ function MapScreen({ navigation }) {
                         axios.spread((data) => {
                           let cnt = 0; //환승역 갯수
                           let count = 0; //출발지와 목적지
+                          let ccnt = 0;
                           let placelist = [];
                           let list = [];
                           let stationcntlist = [];
@@ -292,6 +293,7 @@ function MapScreen({ navigation }) {
                           let startseclist = [];
                           let codelist = [];
                           let listColor = [];
+                          let ccc = 0;
                           const legs = data.data.paths[0].legs[0];
                           var i,
                             j = 0;
@@ -303,6 +305,12 @@ function MapScreen({ navigation }) {
                           //탑승 가능 여부 변수
                           //걸리는 시간
                           //환승역
+                          placelist[ccnt] = legs.steps[0].stations[0].placeId;
+                          ccnt++;
+                          placelist[ccnt] =
+                            legs.steps[
+                              legs.steps.length - 1
+                            ].stations[0].placeId;
                           for (i = 0; i < legs.steps.length; i = i + 2) {
                             if (
                               i === legs.steps.length ||
@@ -376,9 +384,8 @@ function MapScreen({ navigation }) {
                             startseclist[count] = setTime.second;
                             stationcntlist[count] =
                               legs.steps[i].stations.length;
-                            placelist[count] =
-                              legs.steps[i].stations[0].placeId;
                             count++;
+
                             for (
                               j = 0;
                               j < legs.steps[i].stations.length;
@@ -392,8 +399,6 @@ function MapScreen({ navigation }) {
                                 legs.steps[i].stations[j - 1].displayCode;
                               cnt++;
                             } else {
-                              placelist[count] =
-                                legs.steps[i].stations[j - 1].placeId;
                               starthourlist[count] = legs.steps[
                                 i
                               ].arrivalTime.substring(11, 13);
@@ -408,7 +413,9 @@ function MapScreen({ navigation }) {
                             transcount++;
                           }
 
-                          console.log("placelist", placelist);
+                          console.log("출발지와 목적지의 장소 넘버", placelist);
+                          console.log(startOK);
+                          console.log(transferOK);
                           console.log(
                             "환승역과 환승역 사이의 역 개수",
                             stationcntlist
