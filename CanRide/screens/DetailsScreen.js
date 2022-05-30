@@ -1,12 +1,12 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Platform } from "react-native";
 
 import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
-
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
 const DetailsScreen = ({ route, navigation }) => {
@@ -110,12 +110,18 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.rightWrap}>
-        <View stlye={styles.boxWrap}>
-          <View style={styles.additionalInformation}>
-            <Text style={styles.PName}>{Possible}</Text>
-          </View>
+        <View style={styles.additionalInformation}>
+          <Text style={styles.PName}>{Possible}</Text>
         </View>
-        <View>
+        <View
+          style={{
+            flex: 1.2,
+            justifyContent: "center",
+            flexDirection: "row",
+            //alignItems: "",
+            //backgroundColor: "green",
+          }}
+        >
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -156,7 +162,7 @@ const DetailsScreen = ({ route, navigation }) => {
               });
             }}
           >
-            <Text>🚶🏻‍♂️</Text>
+            <Ionicons name="walk" size={80} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -186,12 +192,11 @@ const DetailsScreen = ({ route, navigation }) => {
                 navigation.navigate("Bike", {
                   distance: distance,
                   duration: duration,
-                  taxi_fare: taxi_fare,
                 });
               });
             }}
           >
-            <Text>🚲</Text>
+            <Ionicons name="bicycle" size={80} color="white" />
           </TouchableOpacity>
         </View>
       </View>
