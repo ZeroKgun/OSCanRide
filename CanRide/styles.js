@@ -100,16 +100,16 @@ const styles = StyleSheet.create({
   DetailContainer: {
     flex: 1,
     backgroundColor: "white",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   leftWrap: {
-    width: '60%',
+    width: "60%",
   },
   rightWrap: {
     marginTop: 40,
-    width: '37%',
+    width: "37%",
   },
   additionalInformation: {
     padding: 20,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     borderColor: "green",
   },
   fail: {
-    borderColor: 'red',
+    borderColor: "red",
   },
   failArrow: {
     color: "red",
@@ -135,13 +135,13 @@ const styles = StyleSheet.create({
   },
   startName: {
     padding: 20,
-    width: '100%',
+    width: "100%",
     borderColor: "green",
     borderWidth: 5,
     borderRadius: 15,
     fontSize: 30,
     fontWeight: "500",
-    textAlign: 'center',
+    textAlign: "center",
   },
   arrow: {
     fontSize: 58,
@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-
   },
   transfer: {
     flex: 1.2,
@@ -167,8 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     fontSize: 30,
     fontWeight: "500",
-    textAlign: 'center',
-
+    textAlign: "center",
   },
   end: {
     flex: 1.2,
@@ -176,14 +174,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   endName: {
-    width: '100%',
+    width: "100%",
     padding: 20,
     borderColor: "green",
     borderWidth: 5,
     borderRadius: 15,
     fontSize: 30,
     fontWeight: "500",
-    textAlign: 'center',
+    textAlign: "center",
+  },
+  walkcontainer: {
+    flex: 1,
+    //marginTop: 200,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    //backgroundColor: "grey",
+  },
+  distance: {
+    flex: 1,
+    marginTop: 200,
+  },
+  distanceText: {
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: 30,
+    textAlign: "center",
+  },
+  walkdistanceText: {
+    textAlign: "center",
+    fontSize: 42,
   },
 });
 
