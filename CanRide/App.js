@@ -1,40 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 //import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-  Animated,
-  TouchableWithoutFeedback,
-  PanResponder,
-  KeyboardAvoidingView,
-  LogBox,
-} from "react-native";
-import styled from "styled-components";
-//import { useState, useEffect, useRef } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import metro from "./JSON/metro.json";
-//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "./JSON/서울시 지하철역 정보 검색 (역명).json";
-import axios from "axios";
-import haversine from "haversine-distance";
-import { LinearGradient } from "expo-linear-gradient";
+import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import allclear from "./JSON/allclear.json";
-import nonego from "./JSON/nonego.json";
-import transferno from "./JSON/transferno.json";
-import stopsameline from "./JSON/가다끊김.json";
+
 import MapScreen from "./screens/MapScreen";
 import DetailsScreen from "./screens/DetailsScreen";
 import WalkScreen from "./screens/WalkScreen";

@@ -1,28 +1,6 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
-  fetch,
-} from "react-native";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import metro from "../JSON/metro.json";
-//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
-import axios from "axios";
-import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text, View } from "react-native";
 import styles from "../styles";
 import WalkMan from "../animeJS/WalkMan";
 
@@ -90,7 +68,7 @@ function WalkScreen({ route, navigation }) {
     );
   } else {
     return (
-      <View style={[styles.walkcontainer, { background: "cyan" }]}>
+      <View style={[styles.walkcontainer, { backgroundColor: "#50d3eb" }]}>
         <View style={styles.distance}>
           <Text style={[styles.walkdistanceText, { color: "white" }]}>
             거리: {(distance / 1000).toFixed(1)}km
@@ -98,14 +76,14 @@ function WalkScreen({ route, navigation }) {
           <Text style={[styles.walkdistanceText, { color: "white" }]}>
             도보수: {stepCount}걸음
           </Text>
-          <Text>{hourormin()}</Text>
+          <Text style={{ color: "white" }}>{hourormin()}</Text>
         </View>
         <View
           style={{
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "grey",
+            backgroundColor: "#50d3eb",
           }}
         >
           <Text style={{ fontSize: 20 }}>{howHard()}</Text>
