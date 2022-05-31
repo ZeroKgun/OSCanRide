@@ -78,7 +78,7 @@ const DetailsScreen = ({ route, navigation }) => {
               <Text
                 key={index}
                 style={
-                  tranferOKColor[index + 1]
+                  transferOKColor[index + 1]
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
                     : [
                         styles.transferName,
