@@ -1,29 +1,6 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
-  fetch,
-  ImageBackground,
-} from "react-native";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import metro from "../JSON/metro.json";
-//import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
-import axios from "axios";
-import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text, View } from "react-native";
 import styles from "../styles";
 import BikeMan from "../animeJS/BikeMan";
 
@@ -31,10 +8,9 @@ let today = new Date();
 let hours = today.getHours();
 
 function BikeScreen({ route, navigation }) {
-  const { distance, duration, taxi_fare } = route.params;
+  const { distance, duration } = route.params;
   console.log("거리", distance);
   console.log("시간", duration);
-  console.log("택시 비", taxi_fare);
 
   const hourormin = () => {
     if (duration > 3600) {
@@ -55,8 +31,8 @@ function BikeScreen({ route, navigation }) {
   const howHard = () => {
     {
       if (distance > 6000) {
-        return <Text style={[{ color: "red" }]}>조금 빡세요!^^</Text>;
-      } else if (distance <= 6000 && distance >= 1000) {
+        return <Text style={[{ color: "red" }]}>멀어요!</Text>;
+      } else if (distance <= 6000 && distance >= 2000) {
         return <Text style={[{ color: "orange" }]}>할만해요!</Text>;
       } else {
         return <Text style={[{ color: "green" }]}>코앞이네!</Text>;
@@ -88,7 +64,7 @@ function BikeScreen({ route, navigation }) {
     );
   } else {
     return (
-      <View style={[styles.walkcontainer, { backgroundColor: "cyan" }]}>
+      <View style={[styles.walkcontainer, { backgroundColor: "#50d3eb" }]}>
         <View style={styles.distance}>
           <Text style={[styles.walkdistanceText, { color: "white" }]}>
             거리: {(distance / 1000).toFixed(1)}km
@@ -100,7 +76,7 @@ function BikeScreen({ route, navigation }) {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "cyan",
+            backgroundColor: "#50d3eb",
           }}
         >
           <Text style={{ fontSize: 20 }}>{howHard()}</Text>

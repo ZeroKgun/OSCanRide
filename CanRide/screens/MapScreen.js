@@ -479,6 +479,7 @@ function MapScreen({ navigation }) {
                           });
                         })
                       );
+
                     }
                   }
                 }}

@@ -42,7 +42,9 @@ const DetailsScreen = ({ route, navigation }) => {
 
   let Possible;
 
+
   if (startOKColor == true && transferOKColor.length === 0) {
+
     Possible = "탈 수 있어  !";
   } else {
     Possible = "탈 수 없어 ..";
@@ -52,7 +54,8 @@ const DetailsScreen = ({ route, navigation }) => {
   for (let i = 0; i <= cnt; i++) {
     if (startMinlist[i + 1] - startMinlist[i] < 0) {
       time[i] = startMinlist[i + 1] - startMinlist[i] + 60;
-    } else {
+    }
+    else {
       time[i] = startMinlist[i + 1] - startMinlist[i];
     }
   }
@@ -82,23 +85,28 @@ const DetailsScreen = ({ route, navigation }) => {
               <Text style={{ fontSize: 15 }}>
                 {stationcntlist[0] - 1}정거장
               </Text>
-              <Text style={{ fontSize: 15 }}>{time[0]}분 소요</Text>
+              <Text style={{ fontSize: 15 }}>
+                {time[0]}분 소요
+              </Text>
             </View>
           </View>
+
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
+
             <View key={index} style={[styles.middle, { flex: index - 1 }]}>
               <Text
                 key={index}
                 style={
                   transferOKColor[index] || transferOKColor.length === 0
+
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
                     : [
-                        styles.transferName,
-                        { color: Lcolor[index + 1] },
-                        styles.fail,
-                      ]
+                      styles.transferName,
+                      { color: Lcolor[index + 1] },
+                      styles.fail,
+                    ]
                 }
               >
                 {Tname[index]}
@@ -106,9 +114,11 @@ const DetailsScreen = ({ route, navigation }) => {
               <View style={{ flexDirection: "row" }}>
                 <Text
                   style={
+
                     transferOKColor[index] || transferOKColor.length === 0
                       ? styles.arrow
                       : [styles.arrow, styles.failArrow]
+
                   }
                 >
                   &darr;
@@ -117,7 +127,11 @@ const DetailsScreen = ({ route, navigation }) => {
                   <Text style={{ fontSize: 15 }}>
                     {stationcntlist[index + 1] - 1}정거장
                   </Text>
-                  <Text style={{ fontSize: 15 }}>{time[index + 1]}분 소요</Text>
+
+                  <Text style={{ fontSize: 15 }}>
+                    {time[index + 1]}분 소요
+                  </Text>
+
                 </View>
               </View>
             </View>
