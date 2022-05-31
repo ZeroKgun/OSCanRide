@@ -43,9 +43,20 @@ const DetailsScreen = ({ route, navigation }) => {
   let Possible;
 
   if (startOKColor == true) {
-    Possible = "탈 수 이써  !";
+
+    Possible = "탈 수 있어  !";
   } else {
-    Possible = "탈 수 업써  !";
+    Possible = "탈 수 없어 ..";
+  }
+
+  let time = [];
+  for (let i = 0; i <= cnt; i++) {
+    if (startMinlist[i + 1] - startMinlist[i] < 0) {
+      time[i] = startMinlist[i + 1] - startMinlist[i] + 60;
+    }
+    else {
+      time[i] = startMinlist[i + 1] - startMinlist[i];
+    }
   }
 
   return (
@@ -69,22 +80,30 @@ const DetailsScreen = ({ route, navigation }) => {
             >
               &darr;
             </Text>
-            <Text>{stationcntlist[0]}개역 이동</Text>
+            <View style={{ flexDirection: "column", marginTop: 20 }}>
+              <Text style={{ fontSize: 15 }}>
+                {stationcntlist[0] - 1}정거장
+              </Text>
+              <Text style={{ fontSize: 15 }}>
+                {time[0]}분 소요
+              </Text>
+            </View>
           </View>
+
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={[styles.middle, { flex: index - 1 }]} key={index}>
+            <View style={[styles.middle, { flex: index - 1 }]}>
               <Text
                 key={index}
                 style={
                   transferOKColor[index + 1]
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
                     : [
-                        styles.transferName,
-                        { color: Lcolor[index + 1] },
-                        styles.fail,
-                      ]
+                      styles.transferName,
+                      { color: Lcolor[index + 1] },
+                      styles.fail,
+                    ]
                 }
               >
                 {Tname[index]}
@@ -92,14 +111,19 @@ const DetailsScreen = ({ route, navigation }) => {
               <View style={{ flexDirection: "row" }}>
                 <Text
                   style={
-                    startOKColor
-                      ? styles.arrow
-                      : [styles.arrow, styles.failArrow]
+                    startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]
                   }
                 >
                   &darr;
                 </Text>
-                <Text>{stationcntlist[index + 1]}개역 이동</Text>
+                <View style={{ flexDirection: "column", marginTop: 20 }}>
+                  <Text style={{ fontSize: 15 }}>
+                    {stationcntlist[index + 1] - 1}정거장
+                  </Text>
+                  <Text style={{ fontSize: 15 }}>
+                    {time[index + 1]}분 소요
+                  </Text>
+                </View>
               </View>
             </View>
           ))}
