@@ -41,7 +41,8 @@ const DetailsScreen = ({ route, navigation }) => {
   } = route.params;
 
   let Possible;
-
+  let minSum = 0;
+  let hourSum = 0;
 
   if (startOKColor == true && transferOKColor.length === 0) {
 
@@ -54,9 +55,19 @@ const DetailsScreen = ({ route, navigation }) => {
   for (let i = 0; i <= cnt; i++) {
     if (startMinlist[i + 1] - startMinlist[i] < 0) {
       time[i] = startMinlist[i + 1] - startMinlist[i] + 60;
+      minSum += time[i];
+      if (minSum > 60) {
+        hourSum++;
+        minSum -= 60;
+      }
     }
     else {
       time[i] = startMinlist[i + 1] - startMinlist[i];
+      minSum += time[i];
+      if (minSum > 60) {
+        hourSum++;
+        minSum -= 60;
+      }
     }
   }
 
@@ -150,8 +161,22 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.rightWrap}>
-        <View style={[styles.additionalInformation, { flex: 2.5 }]}>
-          <Text style={styles.PName}>{Possible}</Text>
+        <View style={
+          startOKColor == true && transferOKColor.length === 0
+            ? [styles.additionalInformation, { flex: 2.5 }]
+            : [styles.additionalInformation, { flex: 2.5 }, styles.fail]
+        }
+        >
+          <Text style={
+            startOKColor == true && transferOKColor.length === 0
+              ? styles.PName
+              : [styles.PName, styles.failArrow]
+          }
+          >
+            {Possible}
+          </Text>
+          <Text style={{ marginTop: 20 }}>총 소요시간: {hourSum}시간 {minSum}분</Text>
+          <Text style={{ marginTop: 20 }}>환승: {cnt}번</Text>
         </View>
         <View
           style={{
