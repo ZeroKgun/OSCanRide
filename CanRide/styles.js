@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     color: "red",
   },
   PName: {
-    fontSize: 20,
+    fontSize: 80,
     fontWeight: "500",
     color: "green",
   },

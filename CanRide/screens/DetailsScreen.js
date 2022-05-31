@@ -43,9 +43,9 @@ const DetailsScreen = ({ route, navigation }) => {
   let Possible;
 
   if (startOKColor == true) {
-    Possible = "탈 수 이써!";
+    Possible = "탈 수 이써  !";
   } else {
-    Possible = "탈 수 업써!";
+    Possible = "탈 수 업써  !";
   }
 
   return (
