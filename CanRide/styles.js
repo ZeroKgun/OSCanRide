@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     color: "red",
   },
   PName: {
-    fontSize: 80,
+    fontSize: 60,
     fontWeight: "500",
     color: "green",
   },
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 
   transferName: {
     width: "100%",
-    padding: 20,
+    padding: 5,
     borderColor: "green",
     borderWidth: 5,
     borderRadius: 15,
