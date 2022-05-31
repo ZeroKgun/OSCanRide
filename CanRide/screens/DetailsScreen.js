@@ -42,7 +42,8 @@ const DetailsScreen = ({ route, navigation }) => {
 
   let Possible;
 
-  if (startOKColor == true) {
+
+  if (startOKColor == true && transferOKColor.length === 0) {
 
     Possible = "탈 수 있어  !";
   } else {
@@ -93,11 +94,13 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={[styles.middle, { flex: index - 1 }]}>
+
+            <View key={index} style={[styles.middle, { flex: index - 1 }]}>
               <Text
                 key={index}
                 style={
-                  transferOKColor[index + 1]
+                  transferOKColor[index] || transferOKColor.length === 0
+
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
                     : [
                       styles.transferName,
@@ -111,7 +114,11 @@ const DetailsScreen = ({ route, navigation }) => {
               <View style={{ flexDirection: "row" }}>
                 <Text
                   style={
-                    startOKColor ? styles.arrow : [styles.arrow, styles.failArrow]
+
+                    transferOKColor[index] || transferOKColor.length === 0
+                      ? styles.arrow
+                      : [styles.arrow, styles.failArrow]
+
                   }
                 >
                   &darr;
@@ -120,9 +127,11 @@ const DetailsScreen = ({ route, navigation }) => {
                   <Text style={{ fontSize: 15 }}>
                     {stationcntlist[index + 1] - 1}정거장
                   </Text>
+
                   <Text style={{ fontSize: 15 }}>
                     {time[index + 1]}분 소요
                   </Text>
+
                 </View>
               </View>
             </View>
@@ -131,7 +140,7 @@ const DetailsScreen = ({ route, navigation }) => {
         <View style={styles.end}>
           <Text
             style={
-              startOKColor
+              startOKColor && transferOKColor.length === 0
                 ? [styles.endName, { color: Lcolor[cnt] }]
                 : [styles.endName, { color: Lcolor[cnt] }, styles.fail]
             }
