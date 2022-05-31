@@ -448,7 +448,7 @@ function MapScreen({ navigation }) {
                         eLat: endlat,
                         eLng: endlng,
                         startOKColor: startOK,
-                        tranferOKColor: transferOK,
+                        transferOKColor: transferOK,
                         stationcntlist: stationcntlist,
                         starthourlist: starthourlist,
                         startMinlist: startMinlist,

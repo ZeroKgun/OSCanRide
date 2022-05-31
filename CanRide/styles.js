@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderWidth: 1,
     borderRadius: 15,
-    padding: 20,
+    //padding: 20,
   },
   // button: {
   //   borderRadius: 20,
@@ -105,13 +104,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   leftWrap: {
-    width: "60%",
+    marginTop: 40,
+    width: "50%",
   },
   rightWrap: {
     marginTop: 40,
     width: "37%",
   },
   additionalInformation: {
+    flex: 0.1,
     padding: 20,
     borderWidth: 5,
     borderRadius: 15,
