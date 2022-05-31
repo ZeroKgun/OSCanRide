@@ -1,36 +1,21 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
 import {
-  StyleSheet,
   Text,
   View,
-  Dimensions,
-  Alert,
-  TextInput,
-  FlatList,
-  Button,
   TouchableOpacity,
-  Modal,
-  Pressable,
-  Animated,
-  TouchableWithoutFeedback,
-  PanResponder,
-  KeyboardAvoidingView,
+  Platform,
+  Dimensions,
 } from "react-native";
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
-import * as Location from "expo-location";
+
 import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import code from "../JSON/서울시 지하철역 정보 검색 (역명).json";
 import axios from "axios";
-import haversine from "haversine-distance";
-//import { LinearGradient } from "expo-linear-gradient";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const DetailsScreen = ({ route, navigation }) => {
   const {
     S,
@@ -42,7 +27,7 @@ const DetailsScreen = ({ route, navigation }) => {
     E,
     EName,
     startOKColor,
-    tranferOKColor,
+    transferOKColor,
     //건영이 추가
     PT,
     sLat,
@@ -57,10 +42,19 @@ const DetailsScreen = ({ route, navigation }) => {
 
   let Possible;
 
-  if (startOKColor == true) {
-    Possible = "탈 수 이써!";
+  if (startOKColor == true && transferOKColor.length === 0) {
+    Possible = "탈 수 있어  !";
   } else {
-    Possible = "탈 수 업써!";
+    Possible = "탈 수 없어 ..";
+  }
+
+  let time = [];
+  for (let i = 0; i <= cnt; i++) {
+    if (startMinlist[i + 1] - startMinlist[i] < 0) {
+      time[i] = startMinlist[i + 1] - startMinlist[i] + 60;
+    } else {
+      time[i] = startMinlist[i + 1] - startMinlist[i];
+    }
   }
 
   return (
@@ -84,16 +78,21 @@ const DetailsScreen = ({ route, navigation }) => {
             >
               &darr;
             </Text>
-            <Text>{stationcntlist[0]}개역 이동</Text>
+            <View style={{ flexDirection: "column", marginTop: 20 }}>
+              <Text style={{ fontSize: 15 }}>
+                {stationcntlist[0] - 1}정거장
+              </Text>
+              <Text style={{ fontSize: 15 }}>{time[0]}분 소요</Text>
+            </View>
           </View>
         </View>
         <View style={styles.transfer}>
           {Tname.map((transfer, index) => (
-            <View style={[styles.middle, { flex: index - 1 }]} key={index}>
+            <View key={index} style={[styles.middle, { flex: index - 1 }]}>
               <Text
                 key={index}
                 style={
-                  tranferOKColor[index + 1]
+                  transferOKColor[index] || transferOKColor.length === 0
                     ? [styles.transferName, { color: Lcolor[index + 1] }]
                     : [
                         styles.transferName,
@@ -107,14 +106,19 @@ const DetailsScreen = ({ route, navigation }) => {
               <View style={{ flexDirection: "row" }}>
                 <Text
                   style={
-                    startOKColor
+                    transferOKColor[index] || transferOKColor.length === 0
                       ? styles.arrow
                       : [styles.arrow, styles.failArrow]
                   }
                 >
                   &darr;
                 </Text>
-                <Text>{stationcntlist[index + 1]}개역 이동</Text>
+                <View style={{ flexDirection: "column", marginTop: 20 }}>
+                  <Text style={{ fontSize: 15 }}>
+                    {stationcntlist[index + 1] - 1}정거장
+                  </Text>
+                  <Text style={{ fontSize: 15 }}>{time[index + 1]}분 소요</Text>
+                </View>
               </View>
             </View>
           ))}
@@ -122,7 +126,7 @@ const DetailsScreen = ({ route, navigation }) => {
         <View style={styles.end}>
           <Text
             style={
-              startOKColor
+              startOKColor && transferOKColor.length === 0
                 ? [styles.endName, { color: Lcolor[cnt] }]
                 : [styles.endName, { color: Lcolor[cnt] }, styles.fail]
             }
@@ -132,12 +136,21 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.rightWrap}>
-        <View stlye={styles.boxWrap}>
-          <View style={styles.additionalInformation}>
-            <Text style={styles.PName}>{Possible}</Text>
-          </View>
+        <View style={[styles.additionalInformation, { flex: 2.5 }]}>
+          <Text style={styles.PName}>{Possible}</Text>
         </View>
-        <View>
+        <View
+          style={{
+            //flex: 1.2,
+            justifyContent: "center",
+            flexDirection: "row",
+            //alignItems: "flex-end",
+            // backgroundColor: "green",
+            //position: "absolute",
+            //height: SCREEN_HEIGHT,
+            flex: 1,
+          }}
+        >
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -153,7 +166,7 @@ const DetailsScreen = ({ route, navigation }) => {
                   eLine = station_code[i]["line_num"];
                 }
               }
-              const desID = PT[PT.length - 1];
+              const desID = PT[1];
               const walk_url = encodeURI(
                 `https://map.naver.com/v5/api/dir/findwalk?lo=ko&st=1&o=all&l=${sLng},${sLat},${SName}역%2${sLine},${PT[0]};${eLng},${eLat},${EName}역%2${eLine},${desID}&lang=ko`
               );
@@ -178,7 +191,7 @@ const DetailsScreen = ({ route, navigation }) => {
               });
             }}
           >
-            <Text>🚶🏻‍♂️</Text>
+            <Ionicons name="walk" size={80} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -208,12 +221,11 @@ const DetailsScreen = ({ route, navigation }) => {
                 navigation.navigate("Bike", {
                   distance: distance,
                   duration: duration,
-                  taxi_fare: taxi_fare,
                 });
               });
             }}
           >
-            <Text>🚲</Text>
+            <Ionicons name="bicycle" size={80} color="white" />
           </TouchableOpacity>
         </View>
       </View>
