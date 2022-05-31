@@ -310,9 +310,10 @@ function MapScreen({ navigation }) {
                           placelist[ccnt] = legs.steps[0].stations[0].placeId;
                           ccnt++;
                           placelist[ccnt] =
-                            legs.steps[
-                              legs.steps.length - 1
-                            ].stations[0].placeId;
+                            legs.steps[legs.steps.length - 1].stations[
+                              legs.steps[legs.steps.length - 1].stations
+                                .length - 1
+                            ].placeId;
                           for (i = 0; i < legs.steps.length; i++) {
                             if (legs.steps[i].type === "SUBWAY") {
                               if (i === legs.steps.length - 1) {

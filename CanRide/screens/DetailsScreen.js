@@ -1,6 +1,12 @@
 import * as React from "react";
 //import MapView from "react-native-maps";
-import { Text, View, TouchableOpacity, Platform } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+  Dimensions,
+} from "react-native";
 
 import metro from "../JSON/metro.json";
 //import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
@@ -9,6 +15,7 @@ import axios from "axios";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 const DetailsScreen = ({ route, navigation }) => {
   const {
     S,
@@ -110,16 +117,19 @@ const DetailsScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.rightWrap}>
-        <View style={styles.additionalInformation}>
+        <View style={[styles.additionalInformation, { flex: 2.5 }]}>
           <Text style={styles.PName}>{Possible}</Text>
         </View>
         <View
           style={{
-            flex: 1.2,
+            //flex: 1.2,
             justifyContent: "center",
             flexDirection: "row",
-            //alignItems: "",
-            //backgroundColor: "green",
+            //alignItems: "flex-end",
+            // backgroundColor: "green",
+            //position: "absolute",
+            //height: SCREEN_HEIGHT,
+            flex: 1,
           }}
         >
           <TouchableOpacity

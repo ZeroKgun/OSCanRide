@@ -64,7 +64,7 @@ function BikeScreen({ route, navigation }) {
     );
   } else {
     return (
-      <View style={[styles.walkcontainer, { backgroundColor: "cyan" }]}>
+      <View style={[styles.walkcontainer, { backgroundColor: "#50d3eb" }]}>
         <View style={styles.distance}>
           <Text style={[styles.walkdistanceText, { color: "white" }]}>
             거리: {(distance / 1000).toFixed(1)}km
@@ -76,7 +76,7 @@ function BikeScreen({ route, navigation }) {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "cyan",
+            backgroundColor: "#50d3eb",
           }}
         >
           <Text style={{ fontSize: 20 }}>{howHard()}</Text>
